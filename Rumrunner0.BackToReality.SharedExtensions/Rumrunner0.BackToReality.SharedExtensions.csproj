@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Platform>AnyCPU</Platform>
+		<Configurations>Debug;Release</Configurations>
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<IsPackable>true</IsPackable>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>Rumrunner0.BackToReality.SharedExtensions</PackageId>
+		<Version>0.1.0</Version>
+		<Title>BackToReality.SharedExtensions</Title>
+		<Authors>Roman Malyi</Authors>
+		<Copyright>Copyright (c) Roman Malyi 2025.</Copyright>
+		<RepositoryUrl>https://github.com/rumrunner0/back-to-reality-shared-extensions</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Company>Roman Malyi</Company>
+		<Product>BackToReality.SharedExtensions</Product>
+		<AssemblyVersion>0.1.0</AssemblyVersion>
+		<FileVersion>0.1.0.0</FileVersion>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>../../../documents/rumrunner0_backtoreality_sharedextensions.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+		<Optimize>false</Optimize>
+		<DefineConstants>TRACE</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>none</DebugType>
+		<Optimize>true</Optimize>
+		<DefineConstants />
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
+	</ItemGroup>
+
+</Project>
