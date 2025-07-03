@@ -45,7 +45,7 @@ public static class StringExtensions
 	/// </summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c>, if the <paramref name="source" /> is valid, <c>false</c>, otherwise.</returns>
-	public static bool IsEmptyOrWhiteSpace(this string source)
+	public static bool IsEmptyOrWhitespace(this string source)
 	{
 		ArgumentNullException.ThrowIfNull(source);
 		return source.All(char.IsWhiteSpace);
@@ -58,7 +58,7 @@ public static class StringExtensions
 	/// <returns><c>true</c>, if the <paramref name="value" /> is a valid JSON, <c>false</c>, otherwise.</returns>
 	public static bool IsValidJson(this string? value)
 	{
-		if (value is null || value.IsEmptyOrWhiteSpace())
+		if (value is null || value.IsEmptyOrWhitespace())
 		{
 			return false;
 		}
