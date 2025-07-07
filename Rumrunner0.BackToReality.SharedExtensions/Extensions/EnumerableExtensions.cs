@@ -27,7 +27,7 @@ public static class EnumerableExtensions
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c>, if the collection is empty, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is empty; <c>false</c> otherwise.</returns>
 	public static bool None<T>(this IEnumerable<T> source)
 	{
 		return !source.Any();
@@ -38,7 +38,7 @@ public static class EnumerableExtensions
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c>, if the collection has multiple items, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection has multiple items; <c>false</c> otherwise.</returns>
 	public static bool Many<T>(this IEnumerable<T> source)
 	{
 		switch (source)

@@ -12,14 +12,14 @@ public static class CollectionExtensions
 	/// Determines whether a collection is <c>null</c> or empty.
 	/// </summary>
 	/// <param name="source">The collection.</param>
-	/// <returns><c>true</c>, if the collection is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
 	public static bool IsNullOrEmpty<T>(this ICollection<T>? source) => source is not { Count: > 0 };
 
 	/// <summary>
 	/// Determines whether a collection isn't <c>null</c> and isn't empty.
 	/// </summary>
 	/// <param name="source">The collection.</param>
-	/// <returns><c>true</c>, if the collection is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
 	public static bool IsNotNullAndNotEmpty<T>(this ICollection<T>? source) => source is { Count: > 0 };
 
 	/// <summary>
@@ -27,7 +27,7 @@ public static class CollectionExtensions
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c>, if the collection is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
 	public static bool None<T>(this ICollection<T> source) => source.Count == 0;
 
 	/// <summary>
@@ -35,7 +35,7 @@ public static class CollectionExtensions
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c>, if the collection is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
 	public static bool Any<T>(this ICollection<T> source) => source.Count != 0;
 
 	/// <summary>
@@ -43,7 +43,7 @@ public static class CollectionExtensions
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c>, if the collection is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
 	public static bool Many<T>(this ICollection<T> source) => source.Count > 1;
 
 	/// <summary>
@@ -51,7 +51,7 @@ public static class CollectionExtensions
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="count">The exact count of items expected in the collection.</param>
-	/// <returns><c>true</c>, if the collection is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
 	public static bool Exactly<T>(this ICollection<T> source, int count) => source.Count == count;
 
 	/// <summary>
@@ -59,7 +59,7 @@ public static class CollectionExtensions
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="count">The count of items to compare against the collection count.</param>
-	/// <returns><c>true</c>, if the collection is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
 	public static bool MoreThan<T>(this ICollection<T> source, int count) => source.Count > count;
 
 	/// <summary>
@@ -67,7 +67,7 @@ public static class CollectionExtensions
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="count">The count of items to compare against the collection count.</param>
-	/// <returns><c>true</c>, if the collection is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
 	public static bool LessThan<T>(this ICollection<T> source, int count) => source.Count < count;
 
 	/// <summary>
@@ -75,7 +75,7 @@ public static class CollectionExtensions
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="count">The minimum count of items expected in the collection.</param>
-	/// <returns><c>true</c>, if the collection is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
 	public static bool AtLeast<T>(this ICollection<T> source, int count) => source.Count >= count;
 
 	/// <summary>

@@ -13,7 +13,7 @@ public static class StringExtensions
 	/// Determines whether a <paramref name="source" /> is <c>null</c> or an empty string.
 	/// </summary>
 	/// <param name="source">The string.</param>
-	/// <returns><c>true</c>, if the <paramref name="source" /> is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsNullOrEmpty(this string? source)
 	{
 		return string.IsNullOrEmpty(source);
@@ -23,7 +23,7 @@ public static class StringExtensions
 	/// Determines whether a <paramref name="source" /> is an empty string.
 	/// </summary>
 	/// <param name="source">The string.</param>
-	/// <returns><c>true</c>, if the <paramref name="source" /> is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsEmpty(this string source)
 	{
 		ArgumentNullException.ThrowIfNull(source);
@@ -34,7 +34,7 @@ public static class StringExtensions
 	/// Determines whether a <paramref name="source"/> is <c>null</c>, empty, or consists only of whitespace characters.
 	/// </summary>
 	/// <param name="source">The string.</param>
-	/// <returns><c>true</c>, if the <paramref name="source" /> is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsNullOrEmptyOrWhitespace(this string? source)
 	{
 		return string.IsNullOrWhiteSpace(source);
@@ -44,7 +44,7 @@ public static class StringExtensions
 	/// Determines whether a <paramref name="source" /> is an empty string or contains only whitespaces.
 	/// </summary>
 	/// <param name="source">The string.</param>
-	/// <returns><c>true</c>, if the <paramref name="source" /> is valid, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsEmptyOrWhitespace(this string source)
 	{
 		ArgumentNullException.ThrowIfNull(source);
@@ -55,7 +55,7 @@ public static class StringExtensions
 	/// Determines whether a <paramref name="value" /> is a valid JSON.
 	/// </summary>
 	/// <param name="value">The value to be validated.</param>
-	/// <returns><c>true</c>, if the <paramref name="value" /> is a valid JSON, <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if the <paramref name="value" /> is a valid JSON; <c>false</c> otherwise.</returns>
 	public static bool IsValidJson(this string? value)
 	{
 		if (value is null || value.IsEmptyOrWhitespace())
@@ -112,7 +112,7 @@ public static class StringExtensions
 	/// Tries to parse a string to the <see cref="Guid" />.
 	/// </summary>
 	/// <param name="source">The value to be parsed.</param>
-	/// <returns>A new <see cref="Guid" />, if <paramref name="source" /> is valid, <c>null</c>, otherwise.</returns>
+	/// <returns>A new <see cref="Guid" /> if <paramref name="source" /> is valid; <c>null</c> otherwise.</returns>
 	public static Guid? ToGuidOrNull(this string? source)
 	{
 		return source is null || !Guid.TryParse(source, out var result) ? null : result;
