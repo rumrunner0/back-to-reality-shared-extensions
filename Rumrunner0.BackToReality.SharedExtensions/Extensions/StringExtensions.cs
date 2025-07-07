@@ -117,4 +117,34 @@ public static class StringExtensions
 	{
 		return source is null || !Guid.TryParse(source, out var result) ? null : result;
 	}
+
+	/// <summary>
+	/// Gets the length of a decoded string that is encoded using Base64.
+	/// </summary>
+	/// <param name="base64String">The Base64-encoded string.</param>
+	/// <returns>The length of a decoded string.</returns>
+	public static int GetBase64DecodedStringLength(string base64String)
+	{
+		var padding = base64String.EndsWith("==", StringComparison.Ordinal) ? 2 : base64String.EndsWith('=') ? 1 : 0;
+		return base64String.Length * 3 / 4 - padding;
+	}
+
+	/// <summary>
+	/// Tries to decode the <paramref name="base64String" />.
+	/// </summary>
+	/// <param name="base64String">The string encoded using Base64.</param>
+	/// <param name="bytes">The resulting span containing the decoded bytes.</param>
+	/// <returns><c>true</c> if the conversion was successful; <c>false</c> otherwise.</returns>
+	public static bool TryGetBytesFromBase64String(string base64String, out ReadOnlySpan<byte> bytes)
+	{
+		var buffer = (Span<byte>)new byte[GetBase64DecodedStringLength(base64String)];
+		if (!Convert.TryFromBase64String(base64String, buffer, out var bytesWritten) || bytesWritten != buffer.Length)
+		{
+			bytes = ReadOnlySpan<byte>.Empty;
+			return false;
+		}
+
+		bytes = buffer[..bytesWritten];
+		return true;
+	}
 }

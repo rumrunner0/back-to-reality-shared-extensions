@@ -1,10 +1,11 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Cryptography;
 
-// AES-GCM symmetric encryption, v.1.1.0, from Jun 14, 2025.
+// AES-GCM symmetric encryption, v.1.1.1, from Jul 07, 2025.
 
 /// <summary>
 /// AES-GCM symmetric encryption.
@@ -55,7 +56,7 @@ public static class AesGcmSymmetricEncryption
 		ArgumentNullException.ThrowIfNull(key);
 
 		// Decodes the key.
-		if (!TryGetBytesFromBase64String(key, out var keyBytes))
+		if (!StringExtensions.TryGetBytesFromBase64String(key, out var keyBytes))
 		{
 			throw new ArgumentException("The key is not valid Base64 string", nameof(key));
 		}
@@ -115,7 +116,7 @@ public static class AesGcmSymmetricEncryption
 		ArgumentNullException.ThrowIfNull(key);
 
 		// Gets encrypted data bytes.
-		if (!TryGetBytesFromBase64String(data, out var blob))
+		if (!StringExtensions.TryGetBytesFromBase64String(data, out var blob))
 		{
 			throw new ArgumentException("The data is not valid Base64 string", nameof(data));
 		}
@@ -127,7 +128,7 @@ public static class AesGcmSymmetricEncryption
 		}
 
 		// Decodes the key.
-		if (!TryGetBytesFromBase64String(key, out var keyBytes))
+		if (!StringExtensions.TryGetBytesFromBase64String(key, out var keyBytes))
 		{
 			throw new ArgumentException("The key is not valid Base64 string", nameof(key));
 		}
@@ -167,42 +168,5 @@ public static class AesGcmSymmetricEncryption
 
 		// Decodes the plaintext bytes.
 		return Encoding.UTF8.GetString(plaintextBytes);
-	}
-
-	/// <summary>
-	/// Gets the length of a decoded string that is encoded using Base64.
-	/// </summary>
-	/// <param name="base64String">The Base64-encoded string.</param>
-	/// <returns>The length of a decoded string.</returns>
-	private static int GetBase64DecodedStringLength(string base64String)
-	{
-		var padding = base64String.EndsWith("==", StringComparison.Ordinal) ? 2 : base64String.EndsWith('=') ? 1 : 0;
-		return base64String.Length * 3 / 4 - padding;
-	}
-
-	/// <summary>
-	/// Tries to decode the <paramref name="base64String" />.
-	/// </summary>
-	/// <param name="base64String">The string encoded using Base64.</param>
-	/// <param name="bytes">The span that bytes will be written to.</param>
-	/// <returns><c>true</c>, if the conversion was successful; <c>falses</c>, otherwise.</returns>
-	private static bool TryGetBytesFromBase64String(string base64String, out Span<byte> bytes)
-	{
-		// TODO: Try return ReadOnlySpan.
-
-		bytes = (Span<byte>)new byte[GetBase64DecodedStringLength(base64String)];
-		if (!Convert.TryFromBase64String(base64String, bytes, out var bytesWritten))
-		{
-			bytes = default;
-			return false;
-		}
-
-		if (bytesWritten != bytes.Length)
-		{
-			bytes = default;
-			return false;
-		}
-
-		return true;
 	}
 }
