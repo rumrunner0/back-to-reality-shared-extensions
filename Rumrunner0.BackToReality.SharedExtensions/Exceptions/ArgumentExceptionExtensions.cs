@@ -36,8 +36,8 @@ public static class ArgumentExceptionExtensions
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <typeparam name="T">The type of the <paramref name="source" /> collection items.</typeparam>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty.</exception>
-	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>! If you need to check for <c>null</c> as well, use <see cref="ThrowIfNullOrEmpty{T}" /> instead.</remarks>
-	public static void ThrowIfEmpty<T>(ICollection<T> source, [CallerArgumentExpression("source")] string? argumentName = null)
+	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>. If you need to check for <c>null</c> as well, use <see cref="ThrowIfNullOrEmpty{T}" /> instead.</remarks>
+	public static void ThrowIfEmpty<T>(ICollection<T>? source, [CallerArgumentExpression("source")] string? argumentName = null)
 	{
 		if (source is null) return;
 		if (source.None()) throw new ArgumentException($"{argumentName} is empty");
@@ -62,8 +62,8 @@ public static class ArgumentExceptionExtensions
 	/// <param name="source">The <see cref="string" /> to validate.</param>
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty or whitespace.</exception>
-	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>! If you need to check for <c>null</c> as well, use <see cref="ThrowIfNullOrEmptyOrWhiteSpace" /> instead.</remarks>
-	public static void ThrowIfEmptyOrWhiteSpace(string source, [CallerArgumentExpression("source")] string? argumentName = null)
+	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>. If you need to check for <c>null</c> as well, use <see cref="ThrowIfNullOrEmptyOrWhiteSpace" /> instead.</remarks>
+	public static void ThrowIfEmptyOrWhiteSpace(string? source, [CallerArgumentExpression("source")] string? argumentName = null)
 	{
 		if (source is null) return;
 		if (source.IsEmptyOrWhitespace()) throw new ArgumentException($"{argumentName} is empty or whitespace");
@@ -84,8 +84,8 @@ public static class ArgumentExceptionExtensions
 	/// <param name="source">The <see cref="string" /> to validate.</param>
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty.</exception>
-	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>! If you need to check for <c>null</c> as well, use <see cref="ThrowIfNullOrEmpty" /> instead.</remarks>
-	public static void ThrowIfEmpty(string source, [CallerArgumentExpression("source")] string? argumentName = null)
+	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>. If you need to check for <c>null</c> as well, use <see cref="ThrowIfNullOrEmpty" /> instead.</remarks>
+	public static void ThrowIfEmpty(string? source, [CallerArgumentExpression("source")] string? argumentName = null)
 	{
 		if (source is null) return;
 		if (source.IsEmpty()) throw new ArgumentException($"{argumentName} is empty");
