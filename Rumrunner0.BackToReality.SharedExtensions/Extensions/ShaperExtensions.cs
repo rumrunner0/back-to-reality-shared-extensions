@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
@@ -33,6 +34,20 @@ public static class ShaperExtensions
 	{
 		ArgumentNullException.ThrowIfNull(node);
 		node.Invoke(source);
+		return source;
+	}
+
+	/// <summary>
+	/// Executes a <paramref name="node" /> action and returns a <paramref name="source" />.
+	/// </summary>
+	/// <param name="source">The source.</param>
+	/// <param name="node">The action.</param>
+	/// <typeparam name="TSource">Type of the source.</typeparam>
+	/// <returns>The source.</returns>
+	public static async Task<TSource?> Chain<TSource>(this TSource? source, Func<TSource?, Task> node)
+	{
+		ArgumentNullException.ThrowIfNull(node);
+		await node.Invoke(source);
 		return source;
 	}
 
