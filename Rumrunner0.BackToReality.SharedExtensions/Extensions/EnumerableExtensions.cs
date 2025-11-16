@@ -5,14 +5,10 @@ using System.Linq;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
-/// <summary>
-/// Extensions for <see cref="IEnumerable{T}" />.
-/// </summary>
+/// <summary>Extensions for <see cref="IEnumerable{T}" />.</summary>
 public static class EnumerableExtensions
 {
-	/// <summary>
-	/// Joins a collection using <paramref name="separator" />.
-	/// </summary>
+	/// <summary>Joins a collection using <paramref name="separator" />.</summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="separator">The separator.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
@@ -22,9 +18,7 @@ public static class EnumerableExtensions
 		return string.Join(separator, source);
 	}
 
-	/// <summary>
-	/// Determines whether a collection is empty.
-	/// </summary>
+	/// <summary>Determines whether a collection is empty.</summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
 	/// <returns><c>true</c> if the collection is empty; <c>false</c> otherwise.</returns>
@@ -33,9 +27,7 @@ public static class EnumerableExtensions
 		return !source.Any();
 	}
 
-	/// <summary>
-	/// Determines whether a collection contains multiple items.
-	/// </summary>
+	/// <summary>Determines whether a collection contains multiple items.</summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
 	/// <returns><c>true</c> if the collection has multiple items; <c>false</c> otherwise.</returns>

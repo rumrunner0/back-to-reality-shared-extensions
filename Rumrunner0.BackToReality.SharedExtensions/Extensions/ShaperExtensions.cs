@@ -3,14 +3,10 @@ using System.Threading.Tasks;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
-/// <summary>
-/// Extensions for object shaping.
-/// </summary>
+/// <summary>Extensions for object shaping.</summary>
 public static class ShaperExtensions
 {
-	/// <summary>
-	/// Shapes an object into another object.
-	/// </summary>
+	/// <summary>Shapes an object into another object.</summary>
 	/// <param name="source">The object to be shaped.</param>
 	/// <param name="shaper">The shaper.</param>
 	/// <typeparam name="TSource">Type of the object to be shaped.</typeparam>
@@ -23,9 +19,7 @@ public static class ShaperExtensions
 		return shaper.Invoke(source);
 	}
 
-	/// <summary>
-	/// Executes a <paramref name="node" /> action and returns a <paramref name="source" />.
-	/// </summary>
+	/// <summary>Executes a <paramref name="node" /> action and returns a <paramref name="source" />.</summary>
 	/// <param name="source">The source.</param>
 	/// <param name="node">The action.</param>
 	/// <typeparam name="TSource">Type of the source.</typeparam>
@@ -37,9 +31,7 @@ public static class ShaperExtensions
 		return source;
 	}
 
-	/// <summary>
-	/// Executes a <paramref name="node" /> action and returns a <paramref name="source" />.
-	/// </summary>
+	/// <summary>Executes a <paramref name="node" /> action and returns a <paramref name="source" />.</summary>
 	/// <param name="source">The source.</param>
 	/// <param name="node">The action.</param>
 	/// <typeparam name="TSource">Type of the source.</typeparam>
@@ -51,9 +43,7 @@ public static class ShaperExtensions
 		return source;
 	}
 
-	/// <summary>
-	/// Makes a chain use the <paramref name="target" />.
-	/// </summary>
+	/// <summary>Makes a chain use the <paramref name="target" />.</summary>
 	/// <param name="source">The source.</param>
 	/// <param name="target">The target.</param>
 	/// <typeparam name="TSource">Type of the source.</typeparam>

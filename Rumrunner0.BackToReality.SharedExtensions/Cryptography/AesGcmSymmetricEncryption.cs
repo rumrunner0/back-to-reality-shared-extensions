@@ -5,36 +5,22 @@ using Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Cryptography;
 
-// AES-GCM symmetric encryption, v.1.1.1, from Jul 07, 2025.
-
-/// <summary>
-/// AES-GCM symmetric encryption.
-/// </summary>
+/// <summary>AES-GCM symmetric encryption.</summary>
 public static class AesGcmSymmetricEncryption
 {
-	/// <summary>
-	/// Size of the secret key in bytes (256 bits).
-	/// </summary>
+	/// <summary>Size of the secret key in bytes (256 bits).</summary>
 	private const int _KEY_SIZE = 32;
 
-	/// <summary>
-	/// Size of the nonce in bytes (96 bits).
-	/// </summary>
+	/// <summary>Size of the nonce in bytes (96 bits).</summary>
 	private const int _NONCE_SIZE = 12;
 
-	/// <summary>
-	/// Size of the authentication tag in bytes (128 bit).
-	/// </summary>
+	/// <summary>Size of the authentication tag in bytes (128 bit).</summary>
 	private const int _TAG_SIZE = 16;
 
-	/// <summary>
-	/// Size of the header (<see cref="_NONCE_SIZE" /> + <see cref="_TAG_SIZE" />).
-	/// </summary>
+	/// <summary>Size of the header (<see cref="_NONCE_SIZE" /> + <see cref="_TAG_SIZE" />).</summary>
 	private const int _HEADER_SIZE = _NONCE_SIZE + _TAG_SIZE;
 
-	/// <summary>
-	/// Generates an encryption key encoded using Base64.
-	/// </summary>
+	/// <summary>Generates an encryption key encoded using Base64.</summary>
 	/// <returns>New encryption key.</returns>
 	public static string GenerateKey()
 	{
@@ -43,9 +29,7 @@ public static class AesGcmSymmetricEncryption
 		return Convert.ToBase64String(keyBytes);
 	}
 
-	/// <summary>
-	/// Encrypts <paramref name="data" /> in a blob (nonce|tag|cipher) encoded using Base64.
-	/// </summary>
+	/// <summary>Encrypts <paramref name="data" /> in a blob (nonce|tag|cipher) encoded using Base64.</summary>
 	/// <param name="data">The plaintext.</param>
 	/// <param name="key">The key.</param>
 	/// <returns>Encrypted data.</returns>
@@ -78,20 +62,9 @@ public static class AesGcmSymmetricEncryption
 		// Generates the nonce.
 		RandomNumberGenerator.Fill(nonce);
 
-		try
-		{
-			// Encrypts the plaintext and generates the authentication tag.
-			using var aes = new AesGcm(keyBytes, tag.Length);
-			aes.Encrypt(nonce, plaintextBytes, ciphertext, tag);
-		}
-		catch (CryptographicException e)
-		{
-			throw new ApplicationException("Cryptographic operation failed", e);
-		}
-		catch (Exception e)
-		{
-			throw new ApplicationException("Unexpected error has occurred", e);
-		}
+		// Encrypts the plaintext and generates the authentication tag.
+		using var aes = new AesGcm(keyBytes, tag.Length);
+		aes.Encrypt(nonce, plaintextBytes, ciphertext, tag);
 
 		// Populates a blob.
 		var blob = (Span<byte>)new byte[_HEADER_SIZE + ciphertext.Length];
@@ -103,9 +76,7 @@ public static class AesGcmSymmetricEncryption
 		return Convert.ToBase64String(blob);
 	}
 
-	/// <summary>
-	/// Decrypts a <paramref name="data" /> that has been encrypted using <see cref="Encrypt" />.
-	/// </summary>
+	/// <summary>Decrypts a <paramref name="data" /> that has been encrypted using <see cref="Encrypt" />.</summary>
 	/// <param name="data">The ciphertext.</param>
 	/// <param name="key">The key.</param>
 	/// <returns>Decrypted data.</returns>
@@ -147,24 +118,9 @@ public static class AesGcmSymmetricEncryption
 		// Allocates memory for the plaintext.
 		var plaintextBytes = (Span<byte>)new byte[ciphertext.Length];
 
-		try
-		{
-			// Decrypts the ciphertext and populates the plaintext bytes.
-			using var aes = new AesGcm(keyBytes, tag.Length);
-			aes.Decrypt(nonce, ciphertext, tag, plaintextBytes);
-		}
-		catch (AuthenticationTagMismatchException e)
-		{
-			throw new ApplicationException("Authentication tag mismatch. Data has been tampered with or the wrong key was supplied", e);
-		}
-		catch (CryptographicException e)
-		{
-			throw new ApplicationException("Cryptographic operation failed", e);
-		}
-		catch (Exception e)
-		{
-			throw new ApplicationException("Unexpected error has occurred", e);
-		}
+		// Decrypts the ciphertext and populates the plaintext bytes.
+		using var aes = new AesGcm(keyBytes, tag.Length);
+		aes.Decrypt(nonce, ciphertext, tag, plaintextBytes);
 
 		// Decodes the plaintext bytes.
 		return Encoding.UTF8.GetString(plaintextBytes);

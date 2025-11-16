@@ -3,9 +3,7 @@ using System.Text;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
-/// <summary>
-/// Extensions for <see cref="Exception" />.
-/// </summary>
+/// <summary>Extensions for <see cref="Exception" />.</summary>
 public static class ExceptionExtensions
 {
 	/// <summary>

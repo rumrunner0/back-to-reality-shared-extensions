@@ -4,14 +4,10 @@ using System.Text.Json;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
-/// <summary>
-/// Extensions for <see cref="string" />.
-/// </summary>
+/// <summary>Extensions for <see cref="string" />.</summary>
 public static class StringExtensions
 {
-	/// <summary>
-	/// Determines whether a <paramref name="source" /> is <c>null</c> or an empty string.
-	/// </summary>
+	/// <summary>Determines whether a <paramref name="source" /> is <c>null</c> or an empty string.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsNullOrEmpty(this string? source)
@@ -19,9 +15,7 @@ public static class StringExtensions
 		return string.IsNullOrEmpty(source);
 	}
 
-	/// <summary>
-	/// Determines whether a <paramref name="source" /> is an empty string.
-	/// </summary>
+	/// <summary>Determines whether a <paramref name="source" /> is an empty string.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsEmpty(this string source)
@@ -30,9 +24,7 @@ public static class StringExtensions
 		return source.Length == 0;
 	}
 
-	/// <summary>
-	/// Determines whether a <paramref name="source"/> is <c>null</c>, empty, or consists only of whitespace characters.
-	/// </summary>
+	/// <summary>Determines whether a <paramref name="source"/> is <c>null</c>, empty, or consists only of whitespace characters.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsNullOrEmptyOrWhitespace(this string? source)
@@ -40,9 +32,7 @@ public static class StringExtensions
 		return string.IsNullOrWhiteSpace(source);
 	}
 
-	/// <summary>
-	/// Determines whether a <paramref name="source" /> is an empty string or contains only whitespaces.
-	/// </summary>
+	/// <summary>Determines whether a <paramref name="source" /> is an empty string or contains only whitespaces.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsEmptyOrWhitespace(this string source)
@@ -51,9 +41,7 @@ public static class StringExtensions
 		return source.All(char.IsWhiteSpace);
 	}
 
-	/// <summary>
-	/// Determines whether a <paramref name="value" /> is a valid JSON.
-	/// </summary>
+	/// <summary>Determines whether a <paramref name="value" /> is a valid JSON.</summary>
 	/// <param name="value">The value to be validated.</param>
 	/// <returns><c>true</c> if the <paramref name="value" /> is a valid JSON; <c>false</c> otherwise.</returns>
 	public static bool IsValidJson(this string? value)
@@ -74,9 +62,7 @@ public static class StringExtensions
 		}
 	}
 
-	/// <summary>
-	/// Splits a string into substrings based on a whitespace delimiter.
-	/// </summary>
+	/// <summary>Splits a string into substrings based on a whitespace delimiter.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns>An array of substrings.</returns>
 	public static string[] SplitByWhitespaces(this string source)
@@ -96,9 +82,7 @@ public static class StringExtensions
 		return string.Format(source, values);
 	}
 
-	/// <summary>
-	/// Parses a string to the <see cref="Guid" />.
-	/// </summary>
+	/// <summary>Parses a string to the <see cref="Guid" />.</summary>
 	/// <param name="source">The value to be parsed.</param>
 	/// <returns>A <see cref="Guid" /> created from the parsed <paramref name="source" />.</returns>
 	/// <exception cref="ArgumentNullException"><paramref name="source" /> is <c>null</c>.</exception>
@@ -108,9 +92,7 @@ public static class StringExtensions
 		return Guid.Parse(source);
 	}
 
-	/// <summary>
-	/// Tries to parse a string to the <see cref="Guid" />.
-	/// </summary>
+	/// <summary>Tries to parse a string to the <see cref="Guid" />.</summary>
 	/// <param name="source">The value to be parsed.</param>
 	/// <returns>A new <see cref="Guid" /> if <paramref name="source" /> is valid; <c>null</c> otherwise.</returns>
 	public static Guid? ToGuidOrNull(this string? source)
@@ -118,9 +100,7 @@ public static class StringExtensions
 		return source is null || !Guid.TryParse(source, out var result) ? null : result;
 	}
 
-	/// <summary>
-	/// Tries to decode the <paramref name="base64String" />.
-	/// </summary>
+	/// <summary>Tries to decode the <paramref name="base64String" />.</summary>
 	/// <param name="base64String">The string encoded using Base64.</param>
 	/// <param name="bytes">The resulting span containing the decoded bytes.</param>
 	/// <returns><c>true</c> if the conversion was successful; <c>false</c> otherwise.</returns>
