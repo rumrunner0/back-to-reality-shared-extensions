@@ -7,10 +7,46 @@ public static class ListExtensions
 {
 	/// <summary>Adds <paramref name="items" /> to a list.</summary>
 	/// <remarks>Makes it possible to use the <b>collection initializer syntax</b> because of naming.</remarks>
-	/// <param name="source">The collection.</param>
+	/// <param name="source">The list.</param>
 	/// <param name="items">The items.</param>
 	/// <typeparam name="T">Type of the list items.</typeparam>
 	public static void Add<T>(this List<T> source, IEnumerable<T> items) => source.AddRange(items);
+
+	/// <summary>
+	/// Adds items that are not <c>null</c> to the <paramref name="source" /> list.
+	/// </summary>
+	/// <param name="source">The collection.</param>
+	/// <param name="items">The items.</param>
+	/// <typeparam name="T">The list item type.</typeparam>
+	/// <returns>The same <see cref="List{T}" />.</returns>
+	public static List<T> AddNotNulls<T>(this List<T> source, params IEnumerable<T?> items) where T : struct
+	{
+		foreach (var item in items)
+		{
+			if (!item.HasValue) continue;
+			source.Add(item.Value);
+		}
+
+		return source;
+	}
+
+	/// <summary>
+	/// Adds items that are not <c>null</c> to the <paramref name="source" /> list.
+	/// </summary>
+	/// <param name="source">The collection.</param>
+	/// <param name="items">The items.</param>
+	/// <typeparam name="T">The list item type.</typeparam>
+	/// <returns>The same <see cref="List{T}" />.</returns>
+	public static List<T> AddNotNulls<T>(this List<T> source, params IEnumerable<T?> items) where T : class
+	{
+		foreach (var item in items)
+		{
+			if (item is null) continue;
+			source.Add(item);
+		}
+
+		return source;
+	}
 
 	/// <summary>Deconstructs a list into a value tuple of two items.</summary>
 	/// <param name="s">The list.</param>
