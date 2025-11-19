@@ -13,13 +13,13 @@ public static class ListExtensions
 	public static void Add<T>(this List<T> source, IEnumerable<T> items) => source.AddRange(items);
 
 	/// <summary>
-	/// Adds items that are not <c>null</c> to the <paramref name="source" /> list.
+	/// Adds the non-null <paramref name="items" /> to the <paramref name="source" /> list.
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="items">The items.</param>
 	/// <typeparam name="T">The list item type.</typeparam>
 	/// <returns>The same <see cref="List{T}" />.</returns>
-	public static List<T> AddNotNulls<T>(this List<T> source, params IEnumerable<T?> items) where T : struct
+	public static List<T> AddNonNulls<T>(this List<T> source, params IEnumerable<T?> items) where T : struct
 	{
 		foreach (var item in items)
 		{
@@ -31,13 +31,13 @@ public static class ListExtensions
 	}
 
 	/// <summary>
-	/// Adds items that are not <c>null</c> to the <paramref name="source" /> list.
+	/// Adds the non-null <paramref name="items" /> to the <paramref name="source" /> list.
 	/// </summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="items">The items.</param>
 	/// <typeparam name="T">The list item type.</typeparam>
 	/// <returns>The same <see cref="List{T}" />.</returns>
-	public static List<T> AddNotNulls<T>(this List<T> source, params IEnumerable<T?> items) where T : class
+	public static List<T> AddNonNulls<T>(this List<T> source, params IEnumerable<T?> items) where T : class
 	{
 		foreach (var item in items)
 		{
