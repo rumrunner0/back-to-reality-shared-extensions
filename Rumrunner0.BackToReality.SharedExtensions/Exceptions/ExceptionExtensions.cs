@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
+namespace Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 
 /// <summary>Extensions for <see cref="Exception" />.</summary>
 public static class ExceptionExtensions

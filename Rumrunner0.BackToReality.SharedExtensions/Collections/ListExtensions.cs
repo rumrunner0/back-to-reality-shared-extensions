@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
+namespace Rumrunner0.BackToReality.SharedExtensions.Collections;
 
 /// <summary>Extensions for <see cref="List{T}" />.</summary>
 public static class ListExtensions

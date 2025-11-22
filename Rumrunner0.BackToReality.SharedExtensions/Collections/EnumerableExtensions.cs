@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
+namespace Rumrunner0.BackToReality.SharedExtensions.Collections;
 
 /// <summary>Extensions for <see cref="IEnumerable{T}" />.</summary>
 public static class EnumerableExtensions

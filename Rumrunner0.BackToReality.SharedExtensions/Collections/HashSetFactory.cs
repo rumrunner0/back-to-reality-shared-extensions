@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Rumrunner0.BackToReality.SharedExtensions.Factories;
+namespace Rumrunner0.BackToReality.SharedExtensions.Collections;
 
 /// <summary>Factory for <see cref="HashSet{T}" />.</summary>
 public static class HashSetFactory

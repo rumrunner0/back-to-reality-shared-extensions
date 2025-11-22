@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
+namespace Rumrunner0.BackToReality.SharedExtensions.Collections;
 
 /// <summary>Extensions for collection types.</summary>
 public static class CollectionExtensions
