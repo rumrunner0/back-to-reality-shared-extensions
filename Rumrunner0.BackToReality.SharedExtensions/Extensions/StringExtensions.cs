@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 
@@ -10,7 +11,7 @@ public static class StringExtensions
 	/// <summary>Determines whether a <paramref name="source" /> is <c>null</c> or an empty string.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
-	public static bool IsNullOrEmpty(this string? source)
+	public static bool IsNullOrEmpty([NotNullWhen(false)] this string? source)
 	{
 		return string.IsNullOrEmpty(source);
 	}
@@ -27,7 +28,7 @@ public static class StringExtensions
 	/// <summary>Determines whether a <paramref name="source"/> is <c>null</c>, empty, or consists only of whitespace characters.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
-	public static bool IsNullOrEmptyOrWhitespace(this string? source)
+	public static bool IsNullOrEmptyOrWhitespace([NotNullWhen(false)] this string? source)
 	{
 		return string.IsNullOrWhiteSpace(source);
 	}
