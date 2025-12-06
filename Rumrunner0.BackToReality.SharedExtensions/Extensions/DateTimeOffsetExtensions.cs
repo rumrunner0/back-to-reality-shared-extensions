@@ -1,4 +1,5 @@
 ﻿using System;
+using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
@@ -12,11 +13,7 @@ public static class DateTimeOffsetExtensions
 	/// <exception cref="ArgumentException">If the resolution is less than or equal to zero.</exception>
 	public static DateTimeOffset Truncate(this DateTimeOffset source, long resolution)
 	{
-		if (resolution <= 0)
-		{
-			throw new ArgumentException("Value must be greater than zero", nameof(resolution));
-		}
-
+		if (resolution <= 0) ArgumentExceptionExtensions.Throw("Value must be greater than zero", resolution);
 		return new (source.UtcTicks - source.UtcTicks % resolution, source.Offset);
 	}
 }

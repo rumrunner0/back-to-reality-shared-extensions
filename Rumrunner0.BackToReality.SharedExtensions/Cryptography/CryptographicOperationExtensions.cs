@@ -12,17 +12,12 @@ public static class CryptographicOperationExtensions
 	/// <returns><c>true</c>, if left and right are equal; <c>false</c>, otherwise.</returns>
 	public static bool FixedTimeEquals(string? left, string? right)
 	{
-		if (left is null || right is null)
-		{
-			return left == right;
-		}
+		if (left is null || right is null) return left == right;
 
 		var leftBytes = Encoding.UTF8.GetBytes(left);
 		var rightBytes = Encoding.UTF8.GetBytes(right);
-		if (leftBytes.Length != rightBytes.Length)
-		{
-			return false;
-		}
+
+		if (leftBytes.Length != rightBytes.Length) return false;
 
 		return CryptographicOperations.FixedTimeEquals(leftBytes, rightBytes);
 	}

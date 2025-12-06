@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 using Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Cryptography;
@@ -36,19 +37,19 @@ public static class AesGcmSymmetricEncryption
 	public static string Encrypt(string data, string key)
 	{
 		// Validates parameters to be not null.
-		ArgumentNullException.ThrowIfNull(data);
-		ArgumentNullException.ThrowIfNull(key);
+		ArgumentExceptionExtensions.ThrowIfNull(data);
+		ArgumentExceptionExtensions.ThrowIfNull(key);
 
 		// Decodes the key.
 		if (!StringExtensions.TryGetBytesFromBase64String(key, out var keyBytes))
 		{
-			throw new ArgumentException("The key is not valid Base64 string", nameof(key));
+			ArgumentExceptionExtensions.Throw("The key is not valid Base64 string", key);
 		}
 
 		// Validates key to have valid length.
 		if (keyBytes.Length != _KEY_SIZE)
 		{
-			throw new ArgumentException($"Length of the key is not valid. It must be {_KEY_SIZE} bytes long", nameof(key));
+			ArgumentExceptionExtensions.Throw($"Length of the key is not valid. It must be {_KEY_SIZE} bytes long", key);
 		}
 
 		// Gets plaintext bytes.
@@ -83,31 +84,31 @@ public static class AesGcmSymmetricEncryption
 	public static string Decrypt(string data, string key)
 	{
 		// Validates parameters to be not null.
-		ArgumentNullException.ThrowIfNull(data);
-		ArgumentNullException.ThrowIfNull(key);
+		ArgumentExceptionExtensions.ThrowIfNull(data);
+		ArgumentExceptionExtensions.ThrowIfNull(key);
 
 		// Gets encrypted data bytes.
 		if (!StringExtensions.TryGetBytesFromBase64String(data, out var blob))
 		{
-			throw new ArgumentException("The data is not valid Base64 string", nameof(data));
+			ArgumentExceptionExtensions.Throw("The data is not valid Base64 string", data);
 		}
 
 		// Validates blob to have valid length.
 		if (blob.Length < _HEADER_SIZE)
 		{
-			throw new ArgumentException("Ciphertext blob is not valid", nameof(data));
+			ArgumentExceptionExtensions.Throw("Ciphertext blob is not valid", data);
 		}
 
 		// Decodes the key.
 		if (!StringExtensions.TryGetBytesFromBase64String(key, out var keyBytes))
 		{
-			throw new ArgumentException("The key is not valid Base64 string", nameof(key));
+			ArgumentExceptionExtensions.Throw("The key is not valid Base64 string", key);
 		}
 
 		// Validates key to have valid length.
 		if (keyBytes.Length != _KEY_SIZE)
 		{
-			throw new ArgumentException($"Length of the key is not valid. It must be {_KEY_SIZE} bytes long", nameof(key));
+			ArgumentExceptionExtensions.Throw($"Length of the key is not valid. It must be {_KEY_SIZE} bytes long", key);
 		}
 
 		// Cuts the blob according to the scheme.

@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
+using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
@@ -21,7 +22,7 @@ public static class StringExtensions
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsEmpty(this string source)
 	{
-		ArgumentNullException.ThrowIfNull(source);
+		ArgumentExceptionExtensions.ThrowIfNull(source);
 		return source.Length == 0;
 	}
 
@@ -38,7 +39,7 @@ public static class StringExtensions
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsEmptyOrWhitespace(this string source)
 	{
-		ArgumentNullException.ThrowIfNull(source);
+		ArgumentExceptionExtensions.ThrowIfNull(source);
 		return source.All(char.IsWhiteSpace);
 	}
 

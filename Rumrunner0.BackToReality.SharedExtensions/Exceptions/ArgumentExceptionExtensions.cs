@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Rumrunner0.BackToReality.SharedExtensions.Collections;
 using Rumrunner0.BackToReality.SharedExtensions.Extensions;
@@ -9,6 +10,17 @@ namespace Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 /// <summary>Extensions for <see cref="ArgumentException" />.</summary>
 public static class ArgumentExceptionExtensions
 {
+	/// <summary>Throws an <see cref="ArgumentException" /> if <paramref name="source" /> is <c>null</c>.</summary>
+	/// <param name="message">The message.</param>
+	/// <param name="source">The argument that caused the exception.</param>
+	/// <param name="innerException">The inner exception.</param>
+	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
+	public static void Throw(string message, object? source, Exception? innerException = null, [CallerArgumentExpression("source")] string? argumentName = null)
+	{
+		throw new ArgumentException(message, argumentName, innerException);
+	}
+
 	/// <summary>Throws an <see cref="ArgumentNullException" /> if <paramref name="source" /> is <c>null</c>.</summary>
 	/// <param name="source">The object to validate.</param>
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
@@ -42,6 +54,18 @@ public static class ArgumentExceptionExtensions
 	{
 		if (source is null) return;
 		if (source.None()) throw new ArgumentException($"{argumentName} is empty");
+	}
+
+	/// <summary></summary>
+	/// <param name="source">The collection to validate.</param>
+	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
+	/// <typeparam name="T">The type of the <paramref name="source" /> collection items.</typeparam>
+	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty.</exception>
+	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>. If you need to check for <c>null</c>, use <see cref="ThrowIfNull" />.</remarks>
+	public static void ThrowIfAnyNull<T>(ICollection<T>? source, [CallerArgumentExpression("source")] string? argumentName = null)
+	{
+		if (source is null) return;
+		if (source.Any(i => i is null)) ArgumentExceptionExtensions.Throw($"One or more {argumentName} items are null", source);
 	}
 
 	#endregion

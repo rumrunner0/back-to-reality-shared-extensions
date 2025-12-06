@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
@@ -14,8 +15,8 @@ public static class ShaperExtensions
 	/// <returns>A new shape of the object.</returns>
 	public static TTarget Shape<TSource, TTarget>(this TSource source, Func<TSource, TTarget> shaper)
 	{
-		ArgumentNullException.ThrowIfNull(source);
-		ArgumentNullException.ThrowIfNull(shaper);
+		ArgumentExceptionExtensions.ThrowIfNull(source);
+		ArgumentExceptionExtensions.ThrowIfNull(shaper);
 		return shaper.Invoke(source);
 	}
 
@@ -26,7 +27,7 @@ public static class ShaperExtensions
 	/// <returns>The source.</returns>
 	public static TSource? Chain<TSource>(this TSource? source, Action<TSource?> node)
 	{
-		ArgumentNullException.ThrowIfNull(node);
+		ArgumentExceptionExtensions.ThrowIfNull(node);
 		node.Invoke(source);
 		return source;
 	}
@@ -38,7 +39,7 @@ public static class ShaperExtensions
 	/// <returns>The source.</returns>
 	public static async Task<TSource?> Chain<TSource>(this TSource? source, Func<TSource?, Task> node)
 	{
-		ArgumentNullException.ThrowIfNull(node);
+		ArgumentExceptionExtensions.ThrowIfNull(node);
 		await node.Invoke(source);
 		return source;
 	}
