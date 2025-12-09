@@ -1,7 +1,7 @@
 ﻿using System;
 using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 
-namespace Rumrunner0.BackToReality.SharedExtensions.DateTime;
+namespace Rumrunner0.BackToReality.SharedExtensions.Time;
 
 /// <summary>Extensions for <see cref="DateTimeOffset" />.</summary>
 public static class DateTimeOffsetExtensions

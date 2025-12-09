@@ -1,6 +1,6 @@
 using System;
 
-namespace Rumrunner0.BackToReality.SharedExtensions.DateTime;
+namespace Rumrunner0.BackToReality.SharedExtensions.Time;
 
 /// <summary>Truncated time provider.</summary>
 public sealed class TruncatedTimeProvider : TimeProvider
