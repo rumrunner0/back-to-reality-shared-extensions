@@ -6,15 +6,15 @@ namespace Rumrunner0.BackToReality.SharedExtensions.ValueObjects;
 public abstract record class ValueObject<T> where T : struct
 {
 	/// <summary>Value.</summary>
-	protected readonly T value;
+	private readonly T _value;
 
 	/// <inheritdoc cref="ValueObject{T}" />
 	protected ValueObject(T value)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(value);
-		this.value = value;
+		this._value = value;
 	}
 
 	/// <inheritdoc />
-	public override string? ToString() => this.value.ToString();
+	public sealed override string? ToString() => this._value.ToString();
 }
