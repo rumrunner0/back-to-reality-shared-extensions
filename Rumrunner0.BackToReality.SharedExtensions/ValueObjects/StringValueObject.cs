@@ -6,15 +6,18 @@ namespace Rumrunner0.BackToReality.SharedExtensions.ValueObjects;
 public abstract record class StringValueObject
 {
 	/// <summary>Value.</summary>
-	protected readonly string value;
+	private readonly string _value;
 
 	/// <inheritdoc cref="StringValueObject" />
 	protected StringValueObject(string value)
 	{
 		ArgumentExceptionExtensions.ThrowIfNullOrEmptyOrWhiteSpace(value);
-		this.value = value;
+		this._value = value;
 	}
 
+	/// <inheritdoc cref="_value" />
+	public string Value => this._value;
+
 	/// <inheritdoc />
-	public override string ToString() => this.value;
+	public sealed override string ToString() => this._value;
 }
