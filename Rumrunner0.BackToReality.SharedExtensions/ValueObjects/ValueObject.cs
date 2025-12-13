@@ -15,6 +15,9 @@ public abstract record class ValueObject<T> where T : struct
 		this._value = value;
 	}
 
+	/// <inheritdoc cref="_value" />
+	public T Value => this._value;
+
 	/// <inheritdoc />
 	public sealed override string? ToString() => this._value.ToString();
 }
