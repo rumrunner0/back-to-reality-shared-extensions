@@ -16,7 +16,7 @@ public static class ArgumentExceptionExtensions
 	/// <param name="innerException">The inner exception.</param>
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
-	public static void Throw(string message, object? source, Exception? innerException = null, [CallerArgumentExpression("source")] string? argumentName = null)
+	public static void Throw(string message, object? source = null, Exception? innerException = null, [CallerArgumentExpression("source")] string? argumentName = null)
 	{
 		throw new ArgumentException(message, argumentName, innerException);
 	}
