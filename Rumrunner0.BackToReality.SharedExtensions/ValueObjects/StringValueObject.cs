@@ -15,9 +15,13 @@ public abstract record class StringValueObject
 		this._value = value;
 	}
 
-	/// <inheritdoc cref="_value" />
+	/// <summary>Value.</summary>
 	public string Value => this._value;
 
 	/// <inheritdoc />
 	public sealed override string ToString() => this._value;
+
+	/// <summary>Implicitly converts a <see cref="StringValueObject" /> to a <see cref="string" />.</summary>
+	/// <param name="source">The <see cref="StringValueObject" />.</param>
+	public static implicit operator string(StringValueObject source) => source.Value;
 }

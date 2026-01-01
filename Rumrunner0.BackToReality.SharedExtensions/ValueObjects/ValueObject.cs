@@ -15,9 +15,14 @@ public abstract record class ValueObject<T> where T : struct
 		this._value = value;
 	}
 
-	/// <inheritdoc cref="_value" />
+	/// <summary>Value.</summary>
 	public T Value => this._value;
 
 	/// <inheritdoc />
 	public sealed override string? ToString() => this._value.ToString();
+
+	/// <summary>Implicitly converts a <see cref="ValueObject{T}" /> to a <see cref="string" />.</summary>
+	/// <param name="source">The <see cref="ValueObject{T}" />.</param>
+	/// <remarks>The result <see cref="string" /> can be <c>null</c>.</remarks>
+	public static implicit operator string?(ValueObject<T> source) => source.ToString();
 }
