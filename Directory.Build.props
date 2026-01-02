@@ -15,7 +15,7 @@
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Description>General-purpose toolkit of utilities and extensions.</Description>
 		<VersionPrefix>0.8.6</VersionPrefix>
-		<VersionSuffix>dev.20260101.1</VersionSuffix>
+		<VersionSuffix></VersionSuffix>
 		<Authors>Roman Malyi</Authors>
 		<Copyright>Copyright (C) 2026 Roman Malyi</Copyright>
 		<PackageProjectUrl>https://github.com/rumrunner0/back-to-reality-shared-extensions</PackageProjectUrl>
