@@ -1,25 +1,24 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Serialization;
 
 /// <summary>Extensions for <see cref="JsonSerializerOptions" />.</summary>
 public static class JsonSerializerOptionsExtensions
 {
-	private static JsonSerializerOptions? _betterWeb;
-
-	/// <summary>Creates a new <see cref="JsonSerializerOptions" /> preconfigured with the default settings.</summary>
-	/// <returns>A new <see cref="JsonSerializerOptions" />.</returns>
-	public static JsonSerializerOptions BetterWeb
+	private static readonly Lazy<JsonSerializerOptions> _betterWeb = new(() =>
 	{
-		get
-		{
-			if (_betterWeb is { } cached) return cached;
-			_betterWeb = new JsonSerializerOptions().ConfigureBetterWeb();
-			_betterWeb.MakeReadOnly();
-			return _betterWeb;
-		}
-	}
+		var options = new JsonSerializerOptions().ConfigureBetterWeb();
+		options.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
+		options.MakeReadOnly();
+		return options;
+	});
+
+	/// <summary>Creates a new read-only <see cref="JsonSerializerOptions" /> preconfigured with the default settings.</summary>
+	/// <returns>A new <see cref="JsonSerializerOptions" />.</returns>
+	public static JsonSerializerOptions BetterWeb => _betterWeb.Value;
 
 	/// <summary>Applies the default behavior.</summary>
 	/// <param name="options">The options.</param>
