@@ -13,9 +13,8 @@ public static class ShaperExtensions
 	/// <typeparam name="TSource">Type of the object to be shaped.</typeparam>
 	/// <typeparam name="TTarget">Type of the object to be shaped to.</typeparam>
 	/// <returns>A new shape of the object.</returns>
-	public static TTarget Shape<TSource, TTarget>(this TSource source, Func<TSource, TTarget> shaper)
+	public static TTarget Shape<TSource, TTarget>(this TSource? source, Func<TSource?, TTarget> shaper)
 	{
-		ArgumentExceptionExtensions.ThrowIfNull(source);
 		ArgumentExceptionExtensions.ThrowIfNull(shaper);
 		return shaper.Invoke(source);
 	}
