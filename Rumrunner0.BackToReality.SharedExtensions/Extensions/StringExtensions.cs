@@ -34,7 +34,7 @@ public static class StringExtensions
 		return string.IsNullOrWhiteSpace(source);
 	}
 
-	/// <summary>Determines whether a <paramref name="source" /> is an empty string or contains only whitespaces.</summary>
+	/// <summary>Determines whether a <paramref name="source" /> is an empty string or contains only whitespace characters.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
 	public static bool IsEmptyOrWhitespace(this string source)
@@ -67,19 +67,19 @@ public static class StringExtensions
 	/// <summary>Splits a string into substrings based on a whitespace delimiter.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns>An array of substrings.</returns>
-	public static string[] SplitByWhitespaces(this string source)
+	public static string[] SplitByWhitespace(this string source)
 	{
 		return source.Split(default(string[]?), StringSplitOptions.RemoveEmptyEntries);
 	}
 
 	/// <summary>
-	/// Enriches a string with some data. <br />
+	/// Formats a <paramref name="source" /> with <paramref name="values" />. <br />
 	/// Basically, this is a wrapper on <see cref="string" />.<see cref="string.Format(string,object?[])" />
 	/// </summary>
 	/// <param name="source">The string.</param>
 	/// <param name="values">The values.</param>
-	/// <returns>A new enriched string.</returns>
-	public static string Enrich(this string source, params object?[] values)
+	/// <returns>A new formatted string.</returns>
+	public static string Format(this string source, params object?[] values)
 	{
 		return string.Format(source, values);
 	}
@@ -99,7 +99,7 @@ public static class StringExtensions
 	/// <returns>A new <see cref="Guid" /> if <paramref name="source" /> is valid; <c>null</c> otherwise.</returns>
 	public static Guid? ToGuidOrNull(this string? source)
 	{
-		return source is null || !Guid.TryParse(source, out var result) ? null : result;
+		return source is not null && Guid.TryParse(source, out var result) ? result : null;
 	}
 
 	/// <summary>Tries to decode the <paramref name="base64String" />.</summary>

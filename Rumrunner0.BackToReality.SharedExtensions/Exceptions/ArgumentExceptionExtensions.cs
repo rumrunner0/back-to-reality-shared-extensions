@@ -21,19 +21,19 @@ public static class ArgumentExceptionExtensions
 	}
 
 	/// <summary>Throws an <see cref="ArgumentNullException" /> if <paramref name="source" /> class is <c>null</c>.</summary>
-	/// <param name="source">The object to validate.</param>
+	/// <param name="source">The entity to validate.</param>
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
-	public static void ThrowIfNull<T>(T? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null) where T : class
+	public static void ThrowIfNull(object? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		if (source is null) throw new ArgumentNullException(argumentName);
 	}
 
-	/// <summary>Throws an <see cref="ArgumentNullException" /> if <paramref name="source" /> struct is <c>null</c>.</summary>
-	/// <param name="source">The object to validate.</param>
+	/// <summary>Throws an <see cref="ArgumentNullException" /> if <paramref name="source" /> struct is <c>null</c> aka has no value.</summary>
+	/// <param name="source">The entity to validate.</param>
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
-	public static void ThrowIfNull<T>(T? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null) where T : struct
+	public static void ThrowIfNullValue<T>(T? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null) where T : struct
 	{
 		if (!source.HasValue) throw new ArgumentNullException(argumentName);
 	}
