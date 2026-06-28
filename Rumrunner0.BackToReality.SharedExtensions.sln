@@ -5,6 +5,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{273C4726-942E-4297-8D02-532493664A95}"
 	ProjectSection(SolutionItems) = preProject
 		Nuget\pack.zsh = Nuget\pack.zsh
+		Nuget\push.zsh = Nuget\push.zsh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Directory", "Directory", "{D2E1F3A7-4C86-4043-96DE-984A76DED347}"
