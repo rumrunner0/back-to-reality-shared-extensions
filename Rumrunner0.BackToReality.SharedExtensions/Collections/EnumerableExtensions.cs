@@ -31,6 +31,7 @@ public static class EnumerableExtensions
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
 	/// <returns><c>true</c> if the collection has multiple items; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static bool Many<T>(this IEnumerable<T> source)
 	{
 		switch (source)

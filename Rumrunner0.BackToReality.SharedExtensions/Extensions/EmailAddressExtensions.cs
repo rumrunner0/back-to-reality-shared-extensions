@@ -6,6 +6,6 @@ namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 public static partial class EmailAddressExtensions
 {
 	/// <summary>Provides a pragmatic regular expression that matches email addresses.</summary>
-	[GeneratedRegex(@"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")]
+	[GeneratedRegex(@"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$", RegexOptions.IgnoreCase)]
 	public static partial Regex PragmaticRegex();
 }

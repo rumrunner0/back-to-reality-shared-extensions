@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
+using Rumrunner0.BackToReality.SharedExtensions.Tasks;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
@@ -13,6 +14,7 @@ public static class ShaperExtensions
 	/// <typeparam name="TSource">Type of the object to be shaped.</typeparam>
 	/// <typeparam name="TTarget">Type of the object to be shaped to.</typeparam>
 	/// <returns>A new shape of the object.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="shaper" /> is <c>null</c>.</exception>
 	public static TTarget Shape<TSource, TTarget>(this TSource? source, Func<TSource?, TTarget> shaper)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(shaper);
@@ -24,6 +26,7 @@ public static class ShaperExtensions
 	/// <param name="node">The action.</param>
 	/// <typeparam name="TSource">Type of the source.</typeparam>
 	/// <returns>The source.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="node" /> is <c>null</c>.</exception>
 	public static TSource? Chain<TSource>(this TSource? source, Action<TSource?> node)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(node);
@@ -36,10 +39,11 @@ public static class ShaperExtensions
 	/// <param name="node">The action.</param>
 	/// <typeparam name="TSource">Type of the source.</typeparam>
 	/// <returns>The source.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="node" /> is <c>null</c>.</exception>
 	public static async Task<TSource?> Chain<TSource>(this TSource? source, Func<TSource?, Task> node)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(node);
-		await node.Invoke(source);
+		await node.Invoke(source).ContinueWithoutContextCapture();
 		return source;
 	}
 

@@ -10,10 +10,10 @@ public static class DateTimeOffsetExtensions
 	/// <param name="source">The <see cref="DateTimeOffset" />.</param>
 	/// <param name="resolution">The resolution in ticks.</param>
 	/// <returns>A new instance of the <see cref="DateTimeOffset" />.</returns>
-	/// <exception cref="ArgumentException">If the resolution is less than or equal to zero.</exception>
+	/// <exception cref="ArgumentException">Thrown if <paramref name="resolution" /> is less than or equal to zero.</exception>
 	public static DateTimeOffset Truncate(this DateTimeOffset source, long resolution)
 	{
 		if (resolution <= 0L) ArgumentExceptionExtensions.Throw("Value must be greater than zero", nameof(resolution));
-		return new (source.UtcTicks - source.UtcTicks % resolution, source.Offset);
+		return new (source.Ticks - source.Ticks % resolution, source.Offset);
 	}
 }

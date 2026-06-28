@@ -3,6 +3,8 @@ using System.Threading;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Collections;
 
+// TODO: Add IReadOnlyCollection alternatives.
+
 /// <summary>Extensions for collection types.</summary>
 public static class CollectionExtensions
 {
@@ -20,19 +22,19 @@ public static class CollectionExtensions
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
 	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool None<T>(this ICollection<T> source) => source.Count == 0;
+	public static bool None<T>(this ICollection<T> source) => source.Exactly(0);
 
 	/// <summary>Determines whether a collection isn't empty.</summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
 	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool Any<T>(this ICollection<T> source) => source.Count != 0;
+	public static bool Any<T>(this ICollection<T> source) => !source.Exactly(0);
 
 	/// <summary>Determines whether a collection contains multiple items.</summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
 	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool Many<T>(this ICollection<T> source) => source.Count > 1;
+	public static bool Many<T>(this ICollection<T> source) => source.MoreThan(1);
 
 	/// <summary>Determines whether a collection contains exactly the <paramref name="count" /> of items.</summary>
 	/// <param name="source">The collection.</param>

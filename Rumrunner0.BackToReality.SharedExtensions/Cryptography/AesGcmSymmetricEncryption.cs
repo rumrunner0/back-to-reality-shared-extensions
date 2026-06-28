@@ -15,7 +15,7 @@ public static class AesGcmSymmetricEncryption
 	/// <summary>Size of the nonce in bytes (96 bits).</summary>
 	private const int _NONCE_SIZE = 12;
 
-	/// <summary>Size of the authentication tag in bytes (128 bit).</summary>
+	/// <summary>Size of the authentication tag in bytes (128 bits).</summary>
 	private const int _TAG_SIZE = 16;
 
 	/// <summary>Size of the header (<see cref="_NONCE_SIZE" /> + <see cref="_TAG_SIZE" />).</summary>
@@ -34,6 +34,8 @@ public static class AesGcmSymmetricEncryption
 	/// <param name="data">The plaintext.</param>
 	/// <param name="key">The key.</param>
 	/// <returns>Encrypted data.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="data" /> or <paramref name="key" /> is <c>null</c>.</exception>
+	/// <exception cref="ArgumentException">Thrown if <paramref name="key" /> is not a valid Base64 string or doesn't have the valid length.</exception>
 	public static string Encrypt(string data, string key)
 	{
 		// Validates parameters to be not null.
@@ -81,6 +83,9 @@ public static class AesGcmSymmetricEncryption
 	/// <param name="data">The ciphertext.</param>
 	/// <param name="key">The key.</param>
 	/// <returns>Decrypted data.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="data" /> or <paramref name="key" /> is <c>null</c>.</exception>
+	/// <exception cref="ArgumentException">Thrown if <paramref name="data" /> is not a valid Base64 string, the blob is too short, or <paramref name="key" /> is not a valid Base64 string or doesn't have the valid length.</exception>
+	/// <exception cref="CryptographicException">Thrown if the authentication tag doesn't match, which means the data has been tampered with or the wrong <paramref name="key" /> was used.</exception>
 	public static string Decrypt(string data, string key)
 	{
 		// Validates parameters to be not null.

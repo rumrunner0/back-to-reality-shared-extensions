@@ -10,7 +10,9 @@ public static class EnvironmentVariableExtensions
 	/// <summary>Retrieves the value of an environment variable that must be set.</summary>
 	/// <param name="name">The name.</param>
 	/// <returns>The value.</returns>
-	/// <exception cref="InvalidOperationException">Thrown if the variable is not set.</exception>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="name" /> is <c>null</c>.</exception>
+	/// <exception cref="ArgumentException">Thrown if <paramref name="name" /> is empty or whitespace.</exception>
+	/// <exception cref="InvalidOperationException">Thrown if the variable is not set or its value is empty.</exception>
 	/// <remarks>See also <see cref="System.Environment.GetEnvironmentVariable(string)" />.</remarks>
 	public static string GetRequired(string name)
 	{

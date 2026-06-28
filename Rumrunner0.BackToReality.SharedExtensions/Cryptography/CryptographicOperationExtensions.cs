@@ -9,7 +9,7 @@ public static class CryptographicOperationExtensions
 	/// <summary>Determines the equality of two strings in an amount of time that depends on the length of the sequences.</summary>
 	/// <param name="left">The left value.</param>
 	/// <param name="right">The right value.</param>
-	/// <returns><c>true</c>, if left and right are equal; <c>false</c>, otherwise.</returns>
+	/// <returns><c>true</c> if left and right are equal; <c>false</c> otherwise.</returns>
 	public static bool FixedTimeEquals(string? left, string? right)
 	{
 		if (left is null || right is null) return left == right;

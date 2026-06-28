@@ -37,7 +37,7 @@ public static class ExceptionExtensions
 	/// <summary>Determines whether the <paramref name="source" /> exception has inner <typeparamref name="TException" /> somewhere in the chain.</summary>
 	/// <param name="source">The exception to check within.</param>
 	/// <typeparam name="TException">The exception type to find.</typeparam>
-	/// <returns>The first <typeparamref name="TException" /> instance found; <c>null</c>, otherwise.</returns>
+	/// <returns>The first <typeparamref name="TException" /> instance found; <c>null</c> otherwise.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static TException? HasInner<TException>(this Exception source) where TException : Exception
 	{
@@ -48,7 +48,7 @@ public static class ExceptionExtensions
 	/// <summary>Determines whether the <paramref name="source" /> exception is <typeparamref name="TException" /> or contains it somewhere in the chain.</summary>
 	/// <param name="source">The exception to check within.</param>
 	/// <typeparam name="TException">The exception type to find.</typeparam>
-	/// <returns>The first <typeparamref name="TException" /> instance found; <c>null</c>, otherwise.</returns>
+	/// <returns>The first <typeparamref name="TException" /> instance found; <c>null</c> otherwise.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static TException? IsOrHasInner<TException>(this Exception source) where TException : Exception
 	{

@@ -20,6 +20,7 @@ public static class StringExtensions
 	/// <summary>Determines whether a <paramref name="source" /> is an empty string.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static bool IsEmpty(this string source)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(source);
@@ -37,6 +38,7 @@ public static class StringExtensions
 	/// <summary>Determines whether a <paramref name="source" /> is an empty string or contains only whitespace characters.</summary>
 	/// <param name="source">The string.</param>
 	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static bool IsEmptyOrWhitespace(this string source)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(source);
@@ -79,6 +81,8 @@ public static class StringExtensions
 	/// <param name="source">The string.</param>
 	/// <param name="values">The values.</param>
 	/// <returns>A new formatted string.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> or <paramref name="values" /> is <c>null</c>.</exception>
+	/// <exception cref="FormatException">Thrown if <paramref name="source" /> is not a valid composite format string.</exception>
 	public static string Format(this string source, params object?[] values)
 	{
 		return string.Format(source, values);

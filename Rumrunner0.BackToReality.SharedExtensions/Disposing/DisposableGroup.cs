@@ -13,6 +13,8 @@ public sealed class DisposableGroup : IReadOnlyList<IDisposable>, IDisposable
 	private IDisposable[]? _items;
 
 	/// <inheritdoc cref="DisposableGroup" />
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="items" /> is <c>null</c>.</exception>
+	/// <exception cref="ArgumentException">Thrown if <paramref name="items" /> is empty or contains a <c>null</c> item.</exception>
 	public DisposableGroup(IList<IDisposable> items)
 	{
 		ArgumentExceptionExtensions.ThrowIfNullOrEmpty(items);
@@ -21,6 +23,7 @@ public sealed class DisposableGroup : IReadOnlyList<IDisposable>, IDisposable
 	}
 
 	/// <inheritdoc />
+	/// <exception cref="AggregateException">Thrown if one or more disposables fail to dispose.</exception>
 	public void Dispose()
 	{
 		// Atomically grab the items and mark the group as disposed by setting items to null.
@@ -49,12 +52,16 @@ public sealed class DisposableGroup : IReadOnlyList<IDisposable>, IDisposable
 	}
 
 	/// <inheritdoc />
+	/// <exception cref="ObjectDisposedException">Thrown if the group is disposed.</exception>
 	public int Count => this.GetRequiredItems().Length;
 
 	/// <inheritdoc />
+	/// <exception cref="ObjectDisposedException">Thrown if the group is disposed.</exception>
+	/// <exception cref="IndexOutOfRangeException">Thrown if <paramref name="index" /> is out of range.</exception>
 	public IDisposable this[int index] => this.GetRequiredItems()[index];
 
 	/// <inheritdoc />
+	/// <exception cref="ObjectDisposedException">Thrown if the group is disposed.</exception>
 	public IEnumerator<IDisposable> GetEnumerator() => ((IEnumerable<IDisposable>)this.GetRequiredItems()).GetEnumerator();
 
 	/// <inheritdoc />

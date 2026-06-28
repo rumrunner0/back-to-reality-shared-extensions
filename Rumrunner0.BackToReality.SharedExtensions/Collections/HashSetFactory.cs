@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Collections;
@@ -17,6 +18,7 @@ public static class HashSetFactory
 	/// <param name="collection">The existing collection.</param>
 	/// <typeparam name="T">The type of items in the set.</typeparam>
 	/// <returns>A new <see cref="HashSet{T}" /> that uses <see cref="ReferenceEqualityComparer" />.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="collection" /> is <c>null</c>.</exception>
 	public static HashSet<T> ReferenceEquality<T>(IEnumerable<T> collection) where T : class
 	{
 		return new (collection, ReferenceEqualityComparer.Instance);
