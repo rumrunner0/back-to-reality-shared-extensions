@@ -15,7 +15,7 @@ public static class ShaperExtensions
 	/// <typeparam name="TTarget">Type of the object to be shaped to.</typeparam>
 	/// <returns>A new shape of the object.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="shaper" /> is <c>null</c>.</exception>
-	public static TTarget Shape<TSource, TTarget>(this TSource? source, Func<TSource?, TTarget> shaper)
+	public static TTarget Shape<TSource, TTarget>(this TSource source, Func<TSource, TTarget> shaper)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(shaper);
 		return shaper.Invoke(source);
@@ -27,7 +27,7 @@ public static class ShaperExtensions
 	/// <typeparam name="TSource">Type of the source.</typeparam>
 	/// <returns>The source.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="node" /> is <c>null</c>.</exception>
-	public static TSource? Chain<TSource>(this TSource? source, Action<TSource?> node)
+	public static TSource Chain<TSource>(this TSource source, Action<TSource> node)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(node);
 		node.Invoke(source);
@@ -35,16 +35,22 @@ public static class ShaperExtensions
 	}
 
 	/// <summary>Executes a <paramref name="node" /> action and returns a <paramref name="source" />.</summary>
+	/// <remarks>The <paramref name="node" /> is validated eagerly, before the returned task is created.</remarks>
 	/// <param name="source">The source.</param>
 	/// <param name="node">The action.</param>
 	/// <typeparam name="TSource">Type of the source.</typeparam>
 	/// <returns>The source.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="node" /> is <c>null</c>.</exception>
-	public static async Task<TSource?> Chain<TSource>(this TSource? source, Func<TSource?, Task> node)
+	public static Task<TSource> Chain<TSource>(this TSource source, Func<TSource, Task> node)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(node);
-		await node.Invoke(source).ContinueWithoutContextCapture();
-		return source;
+		return ChainCore(source, node);
+
+		static async Task<TSource> ChainCore(TSource source, Func<TSource, Task> node)
+		{
+			await node.Invoke(source).ContinueWithoutContextCapture();
+			return source;
+		}
 	}
 
 	/// <summary>Makes a chain use the <paramref name="target" />.</summary>
@@ -53,7 +59,7 @@ public static class ShaperExtensions
 	/// <typeparam name="TSource">Type of the source.</typeparam>
 	/// <typeparam name="TTarget">Type of the target.</typeparam>
 	/// <returns>The target object.</returns>
-	public static TTarget? Follow<TSource, TTarget>(this TSource? source, TTarget? target)
+	public static TTarget Follow<TSource, TTarget>(this TSource? source, TTarget target)
 	{
 		return target;
 	}

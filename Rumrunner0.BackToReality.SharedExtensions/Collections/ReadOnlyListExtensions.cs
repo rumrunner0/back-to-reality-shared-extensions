@@ -10,62 +10,108 @@ public static class ReadOnlyListExtensions
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
 	/// <returns>The first item.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="source" /> is empty.</exception>
-	public static T First<T>(this IReadOnlyList<T> source) => source[Index.FromStart(0)];
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="source" /> is empty.</exception>
+	public static T First<T>(this IReadOnlyList<T> source)
+	{
+		ThrowIfFewerThan(source, count: 1);
+		return source[0];
+	}
 
 	/// <summary>Returns the last item in <paramref name="source" />.</summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
 	/// <returns>The last item.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="source" /> is empty.</exception>
-	public static T Last<T>(this IReadOnlyList<T> source) => source[Index.FromEnd(1)];
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="source" /> is empty.</exception>
+	public static T Last<T>(this IReadOnlyList<T> source)
+	{
+		ThrowIfFewerThan(source, count: 1);
+		return source[source.Count - 1];
+	}
 
 	/// <summary>Deconstructs a list into a value tuple of two items.</summary>
 	/// <param name="s">The list.</param>
 	/// <typeparam name="T">The item type.</typeparam>
 	/// <returns>New value tuple.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="s" /> has fewer than two items.</exception>
-	public static (T, T) Deconstruct2<T>(this IReadOnlyList<T> s) => (s[0], s[1]);
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="s" /> has fewer than two items.</exception>
+	public static (T, T) Deconstruct2<T>(this IReadOnlyList<T> s)
+	{
+		ThrowIfFewerThan(s, count: 2);
+		return (s[0], s[1]);
+	}
 
 	/// <summary>Deconstructs a list into a value tuple of three items.</summary>
 	/// <param name="s">The list.</param>
 	/// <typeparam name="T">The item type.</typeparam>
 	/// <returns>New value tuple.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="s" /> has fewer than three items.</exception>
-	public static (T, T, T) Deconstruct3<T>(this IReadOnlyList<T> s) => (s[0], s[1], s[2]);
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="s" /> has fewer than three items.</exception>
+	public static (T, T, T) Deconstruct3<T>(this IReadOnlyList<T> s)
+	{
+		ThrowIfFewerThan(s, count: 3);
+		return (s[0], s[1], s[2]);
+	}
 
 	/// <summary>Deconstructs a list into a value tuple of four items.</summary>
 	/// <param name="s">The list.</param>
 	/// <typeparam name="T">The item type.</typeparam>
 	/// <returns>New value tuple.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="s" /> has fewer than four items.</exception>
-	public static (T, T, T, T) Deconstruct4<T>(this IReadOnlyList<T> s) => (s[0], s[1], s[2], s[3]);
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="s" /> has fewer than four items.</exception>
+	public static (T, T, T, T) Deconstruct4<T>(this IReadOnlyList<T> s)
+	{
+		ThrowIfFewerThan(s, count: 4);
+		return (s[0], s[1], s[2], s[3]);
+	}
 
 	/// <summary>Deconstructs a list into a value tuple of five items.</summary>
 	/// <param name="s">The list.</param>
 	/// <typeparam name="T">The item type.</typeparam>
 	/// <returns>New value tuple.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="s" /> has fewer than five items.</exception>
-	public static (T, T, T, T, T) Deconstruct5<T>(this IReadOnlyList<T> s) => (s[0], s[1], s[2], s[3], s[4]);
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="s" /> has fewer than five items.</exception>
+	public static (T, T, T, T, T) Deconstruct5<T>(this IReadOnlyList<T> s)
+	{
+		ThrowIfFewerThan(s, count: 5);
+		return (s[0], s[1], s[2], s[3], s[4]);
+	}
 
 	/// <summary>Deconstructs a list into a value tuple of six items.</summary>
 	/// <param name="s">The list.</param>
 	/// <typeparam name="T">The item type.</typeparam>
 	/// <returns>New value tuple.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="s" /> has fewer than six items.</exception>
-	public static (T, T, T, T, T, T) Deconstruct6<T>(this IReadOnlyList<T> s) => (s[0], s[1], s[2], s[3], s[4], s[5]);
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="s" /> has fewer than six items.</exception>
+	public static (T, T, T, T, T, T) Deconstruct6<T>(this IReadOnlyList<T> s)
+	{
+		ThrowIfFewerThan(s, count: 6);
+		return (s[0], s[1], s[2], s[3], s[4], s[5]);
+	}
 
 	/// <summary>Deconstructs a list into a value tuple of seven items.</summary>
 	/// <param name="s">The list.</param>
 	/// <typeparam name="T">The item type.</typeparam>
 	/// <returns>New value tuple.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="s" /> has fewer than seven items.</exception>
-	public static (T, T, T, T, T, T, T) Deconstruct7<T>(this IReadOnlyList<T> s) => (s[0], s[1], s[2], s[3], s[4], s[5], s[6]);
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="s" /> has fewer than seven items.</exception>
+	public static (T, T, T, T, T, T, T) Deconstruct7<T>(this IReadOnlyList<T> s)
+	{
+		ThrowIfFewerThan(s, count: 7);
+		return (s[0], s[1], s[2], s[3], s[4], s[5], s[6]);
+	}
 
 	/// <summary>Deconstructs a list into a value tuple of eight items.</summary>
 	/// <param name="s">The list.</param>
 	/// <typeparam name="T">The item type.</typeparam>
 	/// <returns>New value tuple.</returns>
-	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="s" /> has fewer than eight items.</exception>
-	public static (T, T, T, T, T, T, T, T) Deconstruct8<T>(this IReadOnlyList<T> s) => (s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7]);
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="s" /> has fewer than eight items.</exception>
+	public static (T, T, T, T, T, T, T, T) Deconstruct8<T>(this IReadOnlyList<T> s)
+	{
+		ThrowIfFewerThan(s, count: 8);
+		return (s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7]);
+	}
+
+	/// <summary>Throws an <see cref="InvalidOperationException" /> if <paramref name="source" /> contains fewer than <paramref name="count" /> items.</summary>
+	/// <param name="source">The collection.</param>
+	/// <param name="count">The minimum count of items.</param>
+	/// <typeparam name="T">Type of the collection items.</typeparam>
+	/// <exception cref="InvalidOperationException">Thrown if <paramref name="source" /> contains fewer than <paramref name="count" /> items.</exception>
+	private static void ThrowIfFewerThan<T>(IReadOnlyList<T> source, int count)
+	{
+		if (source.Count < count) throw new InvalidOperationException($"The list must contain at least {count} item(s)");
+	}
 }

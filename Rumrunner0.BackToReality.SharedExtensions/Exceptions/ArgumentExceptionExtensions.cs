@@ -13,8 +13,8 @@ public static class ArgumentExceptionExtensions
 {
 	/// <summary>Throws an <see cref="ArgumentException" />.</summary>
 	/// <param name="message">The message.</param>
-	/// <param name="innerException">The inner exception.</param>
 	/// <param name="argumentName">The name of the argument.</param>
+	/// <param name="innerException">The inner exception.</param>
 	/// <exception cref="ArgumentException">Always thrown.</exception>
 	[DoesNotReturn]
 	public static void Throw(string message, string? argumentName = null, Exception? innerException = null)
@@ -26,7 +26,7 @@ public static class ArgumentExceptionExtensions
 	/// <param name="source">The entity to validate.</param>
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
-	public static void ThrowIfNull(object? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
+	public static void ThrowIfNull([NotNull] object? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		if (source is null) throw new ArgumentNullException(argumentName);
 	}
@@ -35,7 +35,7 @@ public static class ArgumentExceptionExtensions
 	/// <param name="source">The entity to validate.</param>
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
-	public static void ThrowIfNullValue<T>(T? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null) where T : struct
+	public static void ThrowIfNullValue<T>([NotNull] T? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null) where T : struct
 	{
 		if (!source.HasValue) throw new ArgumentNullException(argumentName);
 	}
@@ -48,10 +48,10 @@ public static class ArgumentExceptionExtensions
 	/// <typeparam name="T">The type of <paramref name="source" /> collection items.</typeparam>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty.</exception>
-	public static void ThrowIfNullOrEmpty<T>(IReadOnlyCollection<T>? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
+	public static void ThrowIfNullOrEmpty<T>([NotNull] IReadOnlyCollection<T>? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		ThrowIfNull(source, argumentName);
-		ThrowIfEmpty(source!, argumentName);
+		ThrowIfEmpty(source, argumentName);
 	}
 
 	/// <summary>Throws an <see cref="ArgumentException" /> if <paramref name="source" /> is empty.</summary>
@@ -63,7 +63,7 @@ public static class ArgumentExceptionExtensions
 	public static void ThrowIfEmpty<T>(IReadOnlyCollection<T>? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		if (source is null) return;
-		if (source.None()) throw new ArgumentException($"{argumentName} is empty");
+		if (source.None()) throw new ArgumentException($"{argumentName} is empty", argumentName);
 	}
 
 	/// <summary>Throws an <see cref="ArgumentException" /> if any item in <paramref name="source" /> is <c>null</c>.</summary>
@@ -75,7 +75,7 @@ public static class ArgumentExceptionExtensions
 	public static void ThrowIfAnyNull<T>(IReadOnlyCollection<T>? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		if (source is null) return;
-		if (source.Any(static i => i is null)) Throw($"One or more {argumentName} items are null", nameof(source));
+		if (source.Any(static i => i is null)) Throw($"One or more items in {argumentName} are null", argumentName);
 	}
 
 	#endregion
@@ -87,10 +87,10 @@ public static class ArgumentExceptionExtensions
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is null.</exception>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty or whitespace.</exception>
-	public static void ThrowIfNullOrEmptyOrWhiteSpace(string? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
+	public static void ThrowIfNullOrEmptyOrWhiteSpace([NotNull] string? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		ThrowIfNull(source, argumentName);
-		ThrowIfEmptyOrWhiteSpace(source!, argumentName);
+		ThrowIfEmptyOrWhiteSpace(source, argumentName);
 	}
 
 	/// <summary>Throws an <see cref="ArgumentException" /> if <paramref name="source" /> is empty or whitespace.</summary>
@@ -101,7 +101,7 @@ public static class ArgumentExceptionExtensions
 	public static void ThrowIfEmptyOrWhiteSpace(string? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		if (source is null) return;
-		if (source.IsEmptyOrWhitespace()) throw new ArgumentException($"{argumentName} is empty or whitespace");
+		if (source.IsEmptyOrWhitespace()) throw new ArgumentException($"{argumentName} is empty or whitespace", argumentName);
 	}
 
 	/// <summary>Throws an exception if <paramref name="source" /> is <c>null</c> or empty.</summary>
@@ -109,7 +109,7 @@ public static class ArgumentExceptionExtensions
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is null.</exception>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty.</exception>
-	public static void ThrowIfNullOrEmpty(string source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
+	public static void ThrowIfNullOrEmpty([NotNull] string? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		ThrowIfNull(source, argumentName);
 		ThrowIfEmpty(source, argumentName);
@@ -123,7 +123,7 @@ public static class ArgumentExceptionExtensions
 	public static void ThrowIfEmpty(string? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		if (source is null) return;
-		if (source.IsEmpty()) throw new ArgumentException($"{argumentName} is empty");
+		if (source.IsEmpty()) throw new ArgumentException($"{argumentName} is empty", argumentName);
 	}
 
 	#endregion

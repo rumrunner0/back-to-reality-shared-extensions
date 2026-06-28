@@ -21,13 +21,18 @@ public static class AesGcmSymmetricEncryption
 	/// <summary>Size of the header (<see cref="_NONCE_SIZE" /> + <see cref="_TAG_SIZE" />).</summary>
 	private const int _HEADER_SIZE = _NONCE_SIZE + _TAG_SIZE;
 
+	/// <summary>Strict UTF-8 encoding that throws on ill-formed input instead of silently replacing it.</summary>
+	private static readonly UTF8Encoding _strictUtf8 = new (encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
+
 	/// <summary>Generates an encryption key encoded using Base64.</summary>
 	/// <returns>New encryption key.</returns>
 	public static string GenerateKey()
 	{
 		var keyBytes = (Span<byte>)stackalloc byte[_KEY_SIZE];
 		RandomNumberGenerator.Fill(keyBytes);
-		return Convert.ToBase64String(keyBytes);
+		var key = Convert.ToBase64String(keyBytes);
+		CryptographicOperations.ZeroMemory(keyBytes);
+		return key;
 	}
 
 	/// <summary>Encrypts <paramref name="data" /> in a blob (nonce|tag|cipher) encoded using Base64.</summary>
@@ -36,6 +41,7 @@ public static class AesGcmSymmetricEncryption
 	/// <returns>Encrypted data.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="data" /> or <paramref name="key" /> is <c>null</c>.</exception>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="key" /> is not a valid Base64 string or doesn't have the valid length.</exception>
+	/// <exception cref="EncoderFallbackException">Thrown if <paramref name="data" /> is not well-formed UTF-16 (e.g. contains unpaired surrogates).</exception>
 	public static string Encrypt(string data, string key)
 	{
 		// Validates parameters to be not null.
@@ -45,38 +51,48 @@ public static class AesGcmSymmetricEncryption
 		// Decodes the key.
 		if (!StringExtensions.TryGetBytesFromBase64String(key, out var keyBytes))
 		{
-			ArgumentExceptionExtensions.Throw("The key is not valid Base64 string", key);
+			ArgumentExceptionExtensions.Throw("The key is not valid Base64 string", nameof(key));
 		}
 
-		// Validates key to have valid length.
-		if (keyBytes.Length != _KEY_SIZE)
+		var plaintextBytes = default(byte[]);
+		try
 		{
-			ArgumentExceptionExtensions.Throw($"Length of the key is not valid. It must be {_KEY_SIZE} bytes long", key);
+			// Validates key to have valid length.
+			if (keyBytes.Length != _KEY_SIZE)
+			{
+				ArgumentExceptionExtensions.Throw($"Length of the key is not valid. It must be {_KEY_SIZE} bytes long", nameof(key));
+			}
+
+			// Gets plaintext bytes.
+			plaintextBytes = _strictUtf8.GetBytes(data);
+
+			// Allocates memory for the header and ciphertext.
+			var nonce = (Span<byte>)stackalloc byte[_NONCE_SIZE];
+			var tag = (Span<byte>)stackalloc byte[_TAG_SIZE];
+			var ciphertext = (Span<byte>)new byte[plaintextBytes.Length];
+
+			// Generates the nonce.
+			RandomNumberGenerator.Fill(nonce);
+
+			// Encrypts the plaintext and generates the authentication tag.
+			using var aes = new AesGcm(keyBytes, tag.Length);
+			aes.Encrypt(nonce, plaintextBytes, ciphertext, tag);
+
+			// Populates a blob.
+			var blob = (Span<byte>)new byte[_HEADER_SIZE + ciphertext.Length];
+			nonce.CopyTo(blob[.._NONCE_SIZE]);
+			tag.CopyTo(blob[_NONCE_SIZE.._HEADER_SIZE]);
+			ciphertext.CopyTo(blob[_HEADER_SIZE..]);
+
+			// Encodes the blob.
+			return Convert.ToBase64String(blob);
 		}
-
-		// Gets plaintext bytes.
-		var plaintextBytes = Encoding.UTF8.GetBytes(data);
-
-		// Allocates memory for the header and ciphertext.
-		var nonce = (Span<byte>)stackalloc byte[_NONCE_SIZE];
-		var tag = (Span<byte>)stackalloc byte[_TAG_SIZE];
-		var ciphertext = (Span<byte>)new byte[plaintextBytes.Length];
-
-		// Generates the nonce.
-		RandomNumberGenerator.Fill(nonce);
-
-		// Encrypts the plaintext and generates the authentication tag.
-		using var aes = new AesGcm(keyBytes, tag.Length);
-		aes.Encrypt(nonce, plaintextBytes, ciphertext, tag);
-
-		// Populates a blob.
-		var blob = (Span<byte>)new byte[_HEADER_SIZE + ciphertext.Length];
-		nonce.CopyTo(blob[.._NONCE_SIZE]);
-		tag.CopyTo(blob[_NONCE_SIZE.._HEADER_SIZE]);
-		ciphertext.CopyTo(blob[_HEADER_SIZE..]);
-
-		// Encodes the blob.
-		return Convert.ToBase64String(blob);
+		finally
+		{
+			// Clears the transient copies of the secrets.
+			CryptographicOperations.ZeroMemory(keyBytes);
+			if (plaintextBytes is not null) CryptographicOperations.ZeroMemory(plaintextBytes);
+		}
 	}
 
 	/// <summary>Decrypts a <paramref name="data" /> that has been encrypted using <see cref="Encrypt" />.</summary>
@@ -86,6 +102,7 @@ public static class AesGcmSymmetricEncryption
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="data" /> or <paramref name="key" /> is <c>null</c>.</exception>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="data" /> is not a valid Base64 string, the blob is too short, or <paramref name="key" /> is not a valid Base64 string or doesn't have the valid length.</exception>
 	/// <exception cref="CryptographicException">Thrown if the authentication tag doesn't match, which means the data has been tampered with or the wrong <paramref name="key" /> was used.</exception>
+	/// <exception cref="DecoderFallbackException">Thrown if the decrypted plaintext is not valid UTF-8 (possible only for blobs produced outside <see cref="Encrypt" />).</exception>
 	public static string Decrypt(string data, string key)
 	{
 		// Validates parameters to be not null.
@@ -95,40 +112,51 @@ public static class AesGcmSymmetricEncryption
 		// Gets encrypted data bytes.
 		if (!StringExtensions.TryGetBytesFromBase64String(data, out var blob))
 		{
-			ArgumentExceptionExtensions.Throw("The data is not valid Base64 string", data);
+			ArgumentExceptionExtensions.Throw("The data is not valid Base64 string", nameof(data));
 		}
 
 		// Validates blob to have valid length.
 		if (blob.Length < _HEADER_SIZE)
 		{
-			ArgumentExceptionExtensions.Throw("Ciphertext blob is not valid", data);
+			ArgumentExceptionExtensions.Throw("Ciphertext blob is not valid", nameof(data));
 		}
 
 		// Decodes the key.
 		if (!StringExtensions.TryGetBytesFromBase64String(key, out var keyBytes))
 		{
-			ArgumentExceptionExtensions.Throw("The key is not valid Base64 string", key);
+			ArgumentExceptionExtensions.Throw("The key is not valid Base64 string", nameof(key));
 		}
 
-		// Validates key to have valid length.
-		if (keyBytes.Length != _KEY_SIZE)
+		var plaintextBytes = default(byte[]);
+		try
 		{
-			ArgumentExceptionExtensions.Throw($"Length of the key is not valid. It must be {_KEY_SIZE} bytes long", key);
+			// Validates key to have valid length.
+			if (keyBytes.Length != _KEY_SIZE)
+			{
+				ArgumentExceptionExtensions.Throw($"Length of the key is not valid. It must be {_KEY_SIZE} bytes long", nameof(key));
+			}
+
+			// Cuts the blob according to the scheme.
+			var blobSpan = (ReadOnlySpan<byte>)blob;
+			var nonce = blobSpan[.._NONCE_SIZE];
+			var tag = blobSpan[_NONCE_SIZE.._HEADER_SIZE];
+			var ciphertext = blobSpan[_HEADER_SIZE..];
+
+			// Allocates memory for the plaintext.
+			plaintextBytes = new byte[ciphertext.Length];
+
+			// Decrypts the ciphertext and populates the plaintext bytes.
+			using var aes = new AesGcm(keyBytes, tag.Length);
+			aes.Decrypt(nonce, ciphertext, tag, plaintextBytes);
+
+			// Decodes the plaintext bytes.
+			return _strictUtf8.GetString(plaintextBytes);
 		}
-
-		// Cuts the blob according to the scheme.
-		var nonce = blob[.._NONCE_SIZE];
-		var tag = blob[_NONCE_SIZE.._HEADER_SIZE];
-		var ciphertext = blob[_HEADER_SIZE..];
-
-		// Allocates memory for the plaintext.
-		var plaintextBytes = (Span<byte>)new byte[ciphertext.Length];
-
-		// Decrypts the ciphertext and populates the plaintext bytes.
-		using var aes = new AesGcm(keyBytes, tag.Length);
-		aes.Decrypt(nonce, ciphertext, tag, plaintextBytes);
-
-		// Decodes the plaintext bytes.
-		return Encoding.UTF8.GetString(plaintextBytes);
+		finally
+		{
+			// Clears the transient copies of the secrets.
+			CryptographicOperations.ZeroMemory(keyBytes);
+			if (plaintextBytes is not null) CryptographicOperations.ZeroMemory(plaintextBytes);
+		}
 	}
 }

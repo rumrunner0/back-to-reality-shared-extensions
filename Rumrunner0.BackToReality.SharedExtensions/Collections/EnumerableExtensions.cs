@@ -22,7 +22,7 @@ public static class EnumerableExtensions
 	/// <summary>Determines whether a collection is <c>null</c> or empty.</summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the collection is <c>null</c> or empty; <c>false</c> otherwise.</returns>
 	public static bool IsNullOrEmpty<T>([NotNullWhen(false)] this IEnumerable<T>? source)
 	{
 		return source is null || source.None();
@@ -31,7 +31,7 @@ public static class EnumerableExtensions
 	/// <summary>Determines whether a collection isn't <c>null</c> and isn't empty.</summary>
 	/// <param name="source">The collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the collection isn't <c>null</c> and isn't empty; <c>false</c> otherwise.</returns>
 	public static bool IsNotNullAndNotEmpty<T>([NotNullWhen(true)] this IEnumerable<T>? source)
 	{
 		return source is not null && source.Some();
@@ -71,29 +71,31 @@ public static class EnumerableExtensions
 	/// <param name="source">The collection.</param>
 	/// <param name="count">The exact count of items expected in the collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the collection contains exactly the <paramref name="count" /> of items; <c>false</c> otherwise.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static bool Exactly<T>(this IEnumerable<T> source, int count)
 	{
-		return CountAtMost(source, count < 0 ? 0 : count + 1) == count;
+		var limit = count < 0 ? 0 : count == int.MaxValue ? int.MaxValue : count + 1;
+		return CountAtMost(source, limit) == count;
 	}
 
 	/// <summary>Determines whether a collection contains more than the <paramref name="count" /> of items.</summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="count">The count of items to compare against the collection count.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the collection contains more than the <paramref name="count" /> of items; <c>false</c> otherwise.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static bool MoreThan<T>(this IEnumerable<T> source, int count)
 	{
-		return CountAtMost(source, count < 0 ? 0 : count + 1) > count;
+		var limit = count < 0 ? 0 : count == int.MaxValue ? int.MaxValue : count + 1;
+		return CountAtMost(source, limit) > count;
 	}
 
 	/// <summary>Determines whether a collection contains less than the <paramref name="count" /> of items.</summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="count">The count of items to compare against the collection count.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the collection contains less than the <paramref name="count" /> of items; <c>false</c> otherwise.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static bool LessThan<T>(this IEnumerable<T> source, int count)
 	{
@@ -104,7 +106,7 @@ public static class EnumerableExtensions
 	/// <param name="source">The collection.</param>
 	/// <param name="count">The minimum count of items expected in the collection.</param>
 	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the collection contains at least the <paramref name="count" /> of items; <c>false</c> otherwise.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static bool AtLeast<T>(this IEnumerable<T> source, int count)
 	{

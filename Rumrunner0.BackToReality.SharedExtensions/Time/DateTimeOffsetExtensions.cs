@@ -11,6 +11,7 @@ public static class DateTimeOffsetExtensions
 	/// <param name="resolution">The resolution in ticks.</param>
 	/// <returns>A new instance of the <see cref="DateTimeOffset" />.</returns>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="resolution" /> is less than or equal to zero.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown if the truncated value would represent a UTC time below <see cref="DateTimeOffset.MinValue" />, which is possible for values with positive offsets near the minimum.</exception>
 	public static DateTimeOffset Truncate(this DateTimeOffset source, long resolution)
 	{
 		if (resolution <= 0L) ArgumentExceptionExtensions.Throw("Value must be greater than zero", nameof(resolution));

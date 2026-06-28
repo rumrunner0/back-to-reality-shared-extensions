@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 using Rumrunner0.BackToReality.SharedExtensions.Extensions;
 
@@ -29,6 +30,6 @@ public static class EnvironmentVariableExtensions
 	public static int GetRequiredInt(string name)
 	{
 		var variable = GetRequired(name);
-		return int.TryParse(variable, out var i) ? i : throw new InvalidOperationException($"'{name}' is not valid (current value: '{variable}')");
+		return int.TryParse(variable, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i) ? i : throw new InvalidOperationException($"'{name}' is not valid (current value: '{variable}')");
 	}
 }

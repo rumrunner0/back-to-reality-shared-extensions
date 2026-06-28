@@ -8,7 +8,7 @@ namespace Rumrunner0.BackToReality.SharedExtensions.Serialization;
 /// <summary>Extensions for <see cref="JsonSerializerOptions" />.</summary>
 public static class JsonSerializerOptionsExtensions
 {
-	private static readonly Lazy<JsonSerializerOptions> _betterWeb = new(() =>
+	private static readonly Lazy<JsonSerializerOptions> _betterWeb = new (() =>
 	{
 		var options = new JsonSerializerOptions().ConfigureBetterWeb();
 		options.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
@@ -16,8 +16,8 @@ public static class JsonSerializerOptionsExtensions
 		return options;
 	});
 
-	/// <summary>Creates a new read-only <see cref="JsonSerializerOptions" /> preconfigured with the default settings.</summary>
-	/// <returns>A new <see cref="JsonSerializerOptions" />.</returns>
+	/// <summary>Gets a shared read-only <see cref="JsonSerializerOptions" /> instance preconfigured with the default settings.</summary>
+	/// <returns>The shared <see cref="JsonSerializerOptions" /> instance.</returns>
 	public static JsonSerializerOptions BetterWeb => _betterWeb.Value;
 
 	/// <summary>Applies the default behavior.</summary>

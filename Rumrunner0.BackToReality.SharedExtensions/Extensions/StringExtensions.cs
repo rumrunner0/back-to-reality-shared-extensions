@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Buffers.Text;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Text.Json;
 using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 
@@ -11,7 +11,7 @@ public static class StringExtensions
 {
 	/// <summary>Determines whether a <paramref name="source" /> is <c>null</c> or an empty string.</summary>
 	/// <param name="source">The string.</param>
-	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the <paramref name="source" /> is <c>null</c> or empty; <c>false</c> otherwise.</returns>
 	public static bool IsNullOrEmpty([NotNullWhen(false)] this string? source)
 	{
 		return string.IsNullOrEmpty(source);
@@ -19,7 +19,7 @@ public static class StringExtensions
 
 	/// <summary>Determines whether a <paramref name="source" /> is an empty string.</summary>
 	/// <param name="source">The string.</param>
-	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the <paramref name="source" /> is empty; <c>false</c> otherwise.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static bool IsEmpty(this string source)
 	{
@@ -29,7 +29,7 @@ public static class StringExtensions
 
 	/// <summary>Determines whether a <paramref name="source"/> is <c>null</c>, empty, or consists only of whitespace characters.</summary>
 	/// <param name="source">The string.</param>
-	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the <paramref name="source" /> is <c>null</c>, empty, or whitespace; <c>false</c> otherwise.</returns>
 	public static bool IsNullOrEmptyOrWhitespace([NotNullWhen(false)] this string? source)
 	{
 		return string.IsNullOrWhiteSpace(source);
@@ -37,18 +37,18 @@ public static class StringExtensions
 
 	/// <summary>Determines whether a <paramref name="source" /> is an empty string or contains only whitespace characters.</summary>
 	/// <param name="source">The string.</param>
-	/// <returns><c>true</c> if the <paramref name="source" /> is valid; <c>false</c> otherwise.</returns>
+	/// <returns><c>true</c> if the <paramref name="source" /> is empty or whitespace; <c>false</c> otherwise.</returns>
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	public static bool IsEmptyOrWhitespace(this string source)
 	{
 		ArgumentExceptionExtensions.ThrowIfNull(source);
-		return source.All(char.IsWhiteSpace);
+		return source.AsSpan().IsWhiteSpace();
 	}
 
 	/// <summary>Determines whether a <paramref name="value" /> is a valid JSON.</summary>
 	/// <param name="value">The value to be validated.</param>
 	/// <returns><c>true</c> if the <paramref name="value" /> is a valid JSON; <c>false</c> otherwise.</returns>
-	public static bool IsValidJson(this string? value)
+	public static bool IsValidJson([NotNullWhen(true)] this string? value)
 	{
 		if (value is null || value.IsEmptyOrWhitespace())
 		{
@@ -57,10 +57,10 @@ public static class StringExtensions
 
 		try
 		{
-			_ = JsonDocument.Parse(value);
+			using var document = JsonDocument.Parse(value);
 			return true;
 		}
-		catch
+		catch (JsonException)
 		{
 			return false;
 		}
@@ -108,19 +108,17 @@ public static class StringExtensions
 
 	/// <summary>Tries to decode the <paramref name="base64String" />.</summary>
 	/// <param name="base64String">The string encoded using Base64.</param>
-	/// <param name="bytes">The resulting span containing the decoded bytes.</param>
+	/// <param name="bytes">The decoded bytes or an empty array if the conversion fails.</param>
 	/// <returns><c>true</c> if the conversion was successful; <c>false</c> otherwise.</returns>
-	public static bool TryGetBytesFromBase64String(string base64String, out ReadOnlySpan<byte> bytes)
+	public static bool TryGetBytesFromBase64String([NotNullWhen(true)] string? base64String, out byte[] bytes)
 	{
-		try
+		if (base64String is null || !Base64.IsValid(base64String, out var decodedLength))
 		{
-			bytes = Convert.FromBase64String(base64String);
-			return true;
-		}
-		catch
-		{
-			bytes = ReadOnlySpan<byte>.Empty;
+			bytes = [];
 			return false;
 		}
+
+		bytes = new byte[decodedLength];
+		return Convert.TryFromBase64String(base64String, bytes, out _);
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Collections;
 
@@ -19,8 +20,11 @@ public static class ListExtensions
 	/// <param name="items">The items.</param>
 	/// <typeparam name="T">The list item type.</typeparam>
 	/// <returns>The same <see cref="List{T}" />.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="items" /> is <c>null</c>.</exception>
 	public static List<T> AddNonNulls<T>(this List<T> source, params IEnumerable<T?> items) where T : struct
 	{
+		ArgumentExceptionExtensions.ThrowIfNull(items);
+
 		foreach (var item in items)
 		{
 			if (!item.HasValue) continue;
@@ -35,8 +39,11 @@ public static class ListExtensions
 	/// <param name="items">The items.</param>
 	/// <typeparam name="T">The list item type.</typeparam>
 	/// <returns>The same <see cref="List{T}" />.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="items" /> is <c>null</c>.</exception>
 	public static List<T> AddNonNulls<T>(this List<T> source, params IEnumerable<T?> items) where T : class
 	{
+		ArgumentExceptionExtensions.ThrowIfNull(items);
+
 		foreach (var item in items)
 		{
 			if (item is null) continue;
@@ -76,6 +83,7 @@ public static class ListExtensions
 	/// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="start" /> is out of range.</exception>
 	public static List<T> RemoveToEnd<T>(this List<T> source, int start)
 	{
+		if (start < 0 || start >= source.Count) throw new ArgumentOutOfRangeException(nameof(start), start, "Start must be within the bounds of the list");
 		source.RemoveBetween(start: start, end: source.Count - 1);
 		return source;
 	}
@@ -103,6 +111,8 @@ public static class ListExtensions
 	/// <exception cref="ArgumentException">Thrown if the range from <paramref name="start" /> to <paramref name="end" /> is outside the bounds of <paramref name="source" />.</exception>
 	public static List<T> RemoveBetween<T>(this List<T> source, int start, int end)
 	{
+		if (start < 0) throw new ArgumentOutOfRangeException(nameof(start), start, "Start must be non-negative");
+		if (end < start) throw new ArgumentOutOfRangeException(nameof(end), end, "End must be greater than or equal to start");
 		source.RemoveRange(index: start, count: end - start + 1);
 		return source;
 	}
