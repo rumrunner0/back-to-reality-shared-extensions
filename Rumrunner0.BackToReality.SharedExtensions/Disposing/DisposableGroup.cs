@@ -15,15 +15,22 @@ public sealed class DisposableGroup : IReadOnlyList<IDisposable>, IDisposable
 	/// <inheritdoc cref="DisposableGroup" />
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="items" /> is <c>null</c>.</exception>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="items" /> is empty or contains a <c>null</c> item.</exception>
-	public DisposableGroup(IList<IDisposable> items)
+	public DisposableGroup(IReadOnlyCollection<IDisposable> items)
 	{
 		ArgumentExceptionExtensions.ThrowIfNullOrEmpty(items);
 		ArgumentExceptionExtensions.ThrowIfAnyNull(items);
 		this._items = items.ToArray();
 	}
 
+	/// <summary>Exceptions thrown by the items during the last <see cref="Dispose" />.</summary>
+	/// <value>Empty if none (or not yet disposed).</value>
+	public IReadOnlyList<Exception> DisposalExceptions { get; private set; } = [];
+
 	/// <inheritdoc />
-	/// <exception cref="AggregateException">Thrown if one or more disposables fail to dispose.</exception>
+	/// <remarks>
+	/// Every item is disposed even if some throw, in reverse order to mirror nested <c>using</c> blocks.
+	/// Failures are collected into <see cref="DisposalExceptions" />.
+	/// </remarks>
 	public void Dispose()
 	{
 		// Atomically grab the items and mark the group as disposed by setting items to null.
@@ -45,10 +52,7 @@ public sealed class DisposableGroup : IReadOnlyList<IDisposable>, IDisposable
 			}
 		}
 
-		if (exceptions is not null)
-		{
-			throw new AggregateException("One or more disposables failed to dispose", exceptions);
-		}
+		if (exceptions is not null) this.DisposalExceptions = exceptions;
 	}
 
 	/// <inheritdoc />

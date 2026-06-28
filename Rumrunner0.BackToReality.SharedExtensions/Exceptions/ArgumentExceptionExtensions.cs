@@ -40,47 +40,7 @@ public static class ArgumentExceptionExtensions
 		if (!source.HasValue) throw new ArgumentNullException(argumentName);
 	}
 
-	#region Collections
-
-	/// <summary>Throws an exception if <paramref name="source" /> is <c>null</c> or empty.</summary>
-	/// <param name="source">The collection to validate.</param>
-	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
-	/// <typeparam name="T">The type of <paramref name="source" /> collection items.</typeparam>
-	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
-	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty.</exception>
-	public static void ThrowIfNullOrEmpty<T>(ICollection<T>? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
-	{
-		ThrowIfNull(source, argumentName);
-		ThrowIfEmpty(source!, argumentName);
-	}
-
-	/// <summary>Throws an <see cref="ArgumentException" /> if <paramref name="source" /> is empty.</summary>
-	/// <param name="source">The collection to validate.</param>
-	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
-	/// <typeparam name="T">The type of the <paramref name="source" /> collection items.</typeparam>
-	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty.</exception>
-	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>. If you need to check for <c>null</c> as well, use <see cref="ThrowIfNullOrEmpty{T}(System.Collections.Generic.ICollection{T}?,string?)" /> instead.</remarks>
-	public static void ThrowIfEmpty<T>(ICollection<T>? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
-	{
-		if (source is null) return;
-		if (source.None()) throw new ArgumentException($"{argumentName} is empty");
-	}
-
-	/// <summary>Throws an <see cref="ArgumentException" /> if any item in <paramref name="source" /> is <c>null</c>.</summary>
-	/// <param name="source">The collection to validate.</param>
-	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
-	/// <typeparam name="T">The type of the <paramref name="source" /> collection items.</typeparam>
-	/// <exception cref="ArgumentException">Thrown if any item in <paramref name="source" /> is <c>null</c>.</exception>
-	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>. If you need to check for <c>null</c>, use <c>ThrowIfNull(T,string)</c>.</remarks>
-	public static void ThrowIfAnyNull<T>(ICollection<T>? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
-	{
-		if (source is null) return;
-		if (source.Any(static i => i is null)) Throw($"One or more {argumentName} items are null", nameof(source));
-	}
-
-	#endregion
-
-	#region Read-only Collections
+	#region IEnumerable
 
 	/// <summary>Throws an exception if <paramref name="source" /> is <c>null</c> or empty.</summary>
 	/// <param name="source">The collection to validate.</param>
@@ -99,7 +59,7 @@ public static class ArgumentExceptionExtensions
 	/// <param name="argumentName">The name of the <paramref name="source" /> argument.</param>
 	/// <typeparam name="T">The type of the <paramref name="source" /> collection items.</typeparam>
 	/// <exception cref="ArgumentException">Thrown if <paramref name="source" /> is empty.</exception>
-	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>. If you need to check for <c>null</c> as well, use <see cref="ThrowIfNullOrEmpty{T}(System.Collections.Generic.IReadOnlyCollection{T}?,string?)" /> instead.</remarks>
+	/// <remarks>This method DOESN'T throw, if <paramref name="source" /> is <c>null</c>. If you need to check for <c>null</c> as well, use <see cref="ThrowIfNullOrEmpty{T}" /> instead.</remarks>
 	public static void ThrowIfEmpty<T>(IReadOnlyCollection<T>? source, [CallerArgumentExpression(nameof(source))] string? argumentName = null)
 	{
 		if (source is null) return;
