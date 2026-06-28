@@ -3,63 +3,9 @@ using System.Threading;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Collections;
 
-// TODO: Add IReadOnlyCollection alternatives.
-
-/// <summary>Extensions for collection types.</summary>
+/// <summary>Extensions for <see cref="ICollection{T}" />.</summary>
 public static class CollectionExtensions
 {
-	/// <summary>Determines whether a collection is <c>null</c> or empty.</summary>
-	/// <param name="source">The collection.</param>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool IsNullOrEmpty<T>(this ICollection<T>? source) => source is not { Count: > 0 };
-
-	/// <summary>Determines whether a collection isn't <c>null</c> and isn't empty.</summary>
-	/// <param name="source">The collection.</param>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool IsNotNullAndNotEmpty<T>(this ICollection<T>? source) => source is { Count: > 0 };
-
-	/// <summary>Determines whether a collection is empty.</summary>
-	/// <param name="source">The collection.</param>
-	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool None<T>(this ICollection<T> source) => source.Exactly(0);
-
-	/// <summary>Determines whether a collection isn't empty.</summary>
-	/// <param name="source">The collection.</param>
-	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool Any<T>(this ICollection<T> source) => !source.Exactly(0);
-
-	/// <summary>Determines whether a collection contains multiple items.</summary>
-	/// <param name="source">The collection.</param>
-	/// <typeparam name="T">Type of the collection items.</typeparam>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool Many<T>(this ICollection<T> source) => source.MoreThan(1);
-
-	/// <summary>Determines whether a collection contains exactly the <paramref name="count" /> of items.</summary>
-	/// <param name="source">The collection.</param>
-	/// <param name="count">The exact count of items expected in the collection.</param>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool Exactly<T>(this ICollection<T> source, int count) => source.Count == count;
-
-	/// <summary>Determines whether a collection contains more than the <paramref name="count" /> of items.</summary>
-	/// <param name="source">The collection.</param>
-	/// <param name="count">The count of items to compare against the collection count.</param>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool MoreThan<T>(this ICollection<T> source, int count) => source.Count > count;
-
-	/// <summary>Determines whether a collection contains less than the <paramref name="count" /> of items.</summary>
-	/// <param name="source">The collection.</param>
-	/// <param name="count">The count of items to compare against the collection count.</param>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool LessThan<T>(this ICollection<T> source, int count) => source.Count < count;
-
-	/// <summary>Determines whether a collection contains at least the <paramref name="count" /> of items.</summary>
-	/// <param name="source">The collection.</param>
-	/// <param name="count">The minimum count of items expected in the collection.</param>
-	/// <returns><c>true</c> if the collection is valid; <c>false</c> otherwise.</returns>
-	public static bool AtLeast<T>(this ICollection<T> source, int count) => source.Count >= count;
-
 	/// <summary>Adds <paramref name="items" /> to a collection using the collection initializer syntax.</summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="items">The items.</param>
