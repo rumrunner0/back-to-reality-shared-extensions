@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Rumrunner0.BackToReality.SharedExtensions.Collections;
 using Xunit;
@@ -7,6 +9,7 @@ namespace Rumrunner0.BackToReality.SharedExtensions.Tests;
 
 public sealed class EnumerableExtensionsTests
 {
+	[SuppressMessage("Sonar", "S2190", Justification = "The endless sequence is the point — the helpers under test must terminate without exhausting it.")]
 	private static IEnumerable<int> Infinite()
 	{
 		while (true) yield return 1;
@@ -17,28 +20,28 @@ public sealed class EnumerableExtensionsTests
 	{
 		Assert.Equal("1-2-3", new[] { 1, 2, 3 }.StringJoin("-"));
 		Assert.Equal("1 2 3", new[] { 1, 2, 3 }.StringJoin());
-		Assert.Equal(string.Empty, new int[0].StringJoin("-"));
+		Assert.Equal(string.Empty, Array.Empty<int>().StringJoin("-"));
 	}
 
 	[Fact]
 	public void IsNullOrEmpty_And_IsNotNullAndNotEmpty_CoverAllCases()
 	{
 		Assert.True(((IEnumerable<int>?)null).IsNullOrEmpty());
-		Assert.True(new int[0].IsNullOrEmpty());
+		Assert.True(Array.Empty<int>().IsNullOrEmpty());
 		Assert.False(new[] { 1 }.IsNullOrEmpty());
 
 		Assert.False(((IEnumerable<int>?)null).IsNotNullAndNotEmpty());
-		Assert.False(new int[0].IsNotNullAndNotEmpty());
+		Assert.False(Array.Empty<int>().IsNotNullAndNotEmpty());
 		Assert.True(new[] { 1 }.IsNotNullAndNotEmpty());
 	}
 
 	[Fact]
 	public void None_Some_Many_MatchItemCounts()
 	{
-		Assert.True(new int[0].None());
+		Assert.True(Array.Empty<int>().None());
 		Assert.False(new[] { 1 }.None());
 
-		Assert.False(new int[0].Some());
+		Assert.False(Array.Empty<int>().Some());
 		Assert.True(new[] { 1 }.Some());
 
 		Assert.False(new[] { 1 }.Many());

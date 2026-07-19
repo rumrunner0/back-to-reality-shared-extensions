@@ -22,7 +22,7 @@ public sealed class ArgumentExceptionExtensionsTests
 		var exception = Assert.Throws<ArgumentNullException>(() => ArgumentExceptionExtensions.ThrowIfNull(missing));
 		Assert.Equal("missing", exception.ParamName);
 
-		ArgumentExceptionExtensions.ThrowIfNull("present");
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfNull("present")));
 	}
 
 	[Fact]
@@ -32,7 +32,7 @@ public sealed class ArgumentExceptionExtensionsTests
 		var exception = Assert.Throws<ArgumentNullException>(() => ArgumentExceptionExtensions.ThrowIfNullValue(missing));
 		Assert.Equal("missing", exception.ParamName);
 
-		ArgumentExceptionExtensions.ThrowIfNullValue((int?)5);
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfNullValue((int?)5)));
 	}
 
 	[Fact]
@@ -45,13 +45,13 @@ public sealed class ArgumentExceptionExtensionsTests
 		var exception = Assert.Throws<ArgumentException>(() => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(empty));
 		Assert.Equal("empty", exception.ParamName);
 
-		ArgumentExceptionExtensions.ThrowIfNullOrEmpty(new List<int> { 1 });
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(new List<int> { 1 })));
 	}
 
 	[Fact]
 	public void ThrowIfEmpty_IgnoresNullCollections()
 	{
-		ArgumentExceptionExtensions.ThrowIfEmpty((List<int>?)null);
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfEmpty((List<int>?)null)));
 	}
 
 	[Fact]
@@ -62,8 +62,8 @@ public sealed class ArgumentExceptionExtensionsTests
 		Assert.Equal("items", exception.ParamName);
 		Assert.Contains("items", exception.Message);
 
-		ArgumentExceptionExtensions.ThrowIfAnyNull(new List<string?> { "a", "b" });
-		ArgumentExceptionExtensions.ThrowIfAnyNull((List<string?>?)null);
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfAnyNull(new List<string?> { "a", "b" })));
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfAnyNull((List<string?>?)null)));
 	}
 
 	[Fact]
@@ -76,7 +76,7 @@ public sealed class ArgumentExceptionExtensionsTests
 		var exception = Assert.Throws<ArgumentException>(() => ArgumentExceptionExtensions.ThrowIfNullOrEmptyOrWhiteSpace(blank));
 		Assert.Equal("blank", exception.ParamName);
 
-		ArgumentExceptionExtensions.ThrowIfNullOrEmptyOrWhiteSpace("value");
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfNullOrEmptyOrWhiteSpace("value")));
 	}
 
 	[Fact]
@@ -89,8 +89,8 @@ public sealed class ArgumentExceptionExtensionsTests
 		var exception = Assert.Throws<ArgumentException>(() => ArgumentExceptionExtensions.ThrowIfNullOrEmpty(empty));
 		Assert.Equal("empty", exception.ParamName);
 
-		ArgumentExceptionExtensions.ThrowIfNullOrEmpty("value");
-		ArgumentExceptionExtensions.ThrowIfEmptyOrWhiteSpace((string?)null);
-		ArgumentExceptionExtensions.ThrowIfEmpty((string?)null);
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfNullOrEmpty("value")));
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfEmptyOrWhiteSpace((string?)null)));
+		Assert.Null(Record.Exception(static () => ArgumentExceptionExtensions.ThrowIfEmpty((string?)null)));
 	}
 }

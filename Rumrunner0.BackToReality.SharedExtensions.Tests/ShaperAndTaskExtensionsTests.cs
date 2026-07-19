@@ -43,18 +43,8 @@ public sealed class ShaperAndTaskExtensionsTests
 	[Fact]
 	public void ChainAsync_ValidatesTheNodeEagerly()
 	{
-		// The exception must surface at the call, not when the returned task is awaited.
-		var thrown = false;
-		try
-		{
-			_ = "value".Chain((Func<string, Task>)null!);
-		}
-		catch (ArgumentNullException)
-		{
-			thrown = true;
-		}
-
-		Assert.True(thrown);
+		// The exception must surface at the call itself, not when the returned task is awaited.
+		Assert.IsType<ArgumentNullException>(Record.Exception(static () => { _ = "value".Chain((Func<string, Task>)null!); }));
 	}
 
 	[Fact]

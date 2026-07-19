@@ -8,16 +8,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Gotchas
 
-- The release version lives in TWO places that must stay in sync: `<VersionPrefix>` in `Directory.Build.props` and `VERSION=` in `Nuget/push.zsh`.
-- All shared MSBuild config lives in `Directory.Build.props`; the csproj contains only `PackageId`/`Title`. The target framework is written as `net9` (no `.0`) — leave it that way.
+- The release version lives in TWO places that must stay in sync: `<VersionPrefix>` in `Rumrunner0.BackToReality.SharedExtensions/Rumrunner0.BackToReality.SharedExtensions.csproj` and `VERSION=` in `Nuget/push.zsh`.
+- Cross-project MSBuild config (target framework `net9.0`, language settings, build matrix, assembly metadata) lives in `Directory.Build.props`; packaging, versioning, strong naming, and doc generation live in the library csproj.
 - Assemblies are strong-named with a key outside the repo (`../documents/rumrunner0_backtoreality_sharedextensions.snk`, gitignored) — a fresh clone won't build without it.
 - `ImplicitUsings` is disabled — every file lists explicit `using` directives.
 - Package versions are centralized (`Directory.Packages.props`, CPM): a `PackageReference` must not carry `Version`; add a `PackageVersion` entry there instead.
-- The test project opts out of inherited packing, signing, and doc generation (`IsPackable`/`SignAssembly`/`GenerateDocumentationFile` all `false`) — keep it that way.
+- The test project explicitly opts out of packing, signing, and doc generation (`IsPackable`/`SignAssembly`/`GenerateDocumentationFile` all `false`) — keep it that way.
 
 ## Releases
 
-Use `/release <version>`. Manual flow: bump the version in both places above → commit `Release X.Y.Z` → delete `bin`/`obj` → verify a clean `dotnet build -c Release` and a green `dotnet test -c Release --no-build` → `Nuget/pack.zsh` → `Nuget/push.zsh` (needs `NUGET_ORG_API_KEY`, exported in the shell profile). A pushed version can never be overwritten on nuget.org.
+Use `/release <version>`. Manual flow: bump the version in both places above → commit `Release X.Y.Z` → `dotnet clean --configuration Release` → verify a clean `dotnet build --configuration Release` and a green `dotnet test --configuration Release --no-build` → `Nuget/pack.zsh` → `Nuget/push.zsh` (needs `NUGET_ORG_API_KEY`, exported in the shell profile). A pushed version can never be overwritten on nuget.org.
 
 ## Code style
 

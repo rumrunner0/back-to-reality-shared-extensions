@@ -26,7 +26,7 @@ public sealed class TimeExtensionsTests
 	[Fact]
 	public void Truncate_ValidatesTheResolution()
 	{
-		var source = DateTimeOffset.UtcNow;
+		var source = new DateTimeOffset(2026, 7, 18, 12, 0, 0, TimeSpan.Zero);
 		Assert.Throws<ArgumentException>(() => source.Truncate(0));
 		Assert.Throws<ArgumentException>(() => source.Truncate(-1));
 	}

@@ -18,7 +18,7 @@ public sealed class CryptographyTests
 	[Theory]
 	[InlineData("")]
 	[InlineData("hello")]
-	[InlineData("довгий текст із юнікодом 🚀")]
+	[InlineData("длинный текст с юникодом 🚀")]
 	public void Encrypt_Decrypt_RoundTripsPlaintext(string plaintext)
 	{
 		var key = AesGcmSymmetricEncryption.GenerateKey();
