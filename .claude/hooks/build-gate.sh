@@ -1,8 +1,8 @@
 #!/bin/sh
+
 # Stop hook: blocks Claude from finishing a turn while the solution fails to compile.
 # Incremental: skips the build when no .cs/.csproj/.props changed since the last SUCCESSFUL build.
-# Loop guard: if a block already triggered a fix attempt this turn (stop_hook_active),
-# notify the user via systemMessage instead of blocking again.
+# Loop guard: if a block already triggered a fix attempt this turn (stop_hook_active), notify the user via systemMessage instead of blocking again.
 
 input=$(cat)
 cd "${CLAUDE_PROJECT_DIR:-$(dirname "$0")/../..}" || exit 0
@@ -13,8 +13,8 @@ stamp=".claude/.build-stamp"
 output=$(dotnet build --nologo -v q 2>&1) && { touch "$stamp"; exit 0; }
 
 if printf '%s' "$input" | jq -e '.stop_hook_active == true' >/dev/null 2>&1; then
-	printf '{"systemMessage":"Build gate: dotnet build is STILL failing after a fix attempt — needs your attention."}'
-	exit 0
+  printf '{"systemMessage":"Build gate: dotnet build is STILL failing after a fix attempt — needs your attention."}'
+  exit 0
 fi
 
 # Prefer MSBuild diagnostic lines (path(line,col): error CSxxxx:); fall back to raw tail.

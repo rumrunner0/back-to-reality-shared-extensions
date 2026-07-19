@@ -1,66 +1,43 @@
 <Project>
 
+	<!-- Target -->
 	<PropertyGroup>
-		<TargetFramework>net9</TargetFramework>
-		<LangVersion>latest</LangVersion>
-		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<Platform>AnyCPU</Platform>
-		<Configurations>Debug;Release</Configurations>
+		<TargetFramework>net9.0</TargetFramework>
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
 
+	<!-- Language -->
 	<PropertyGroup>
-		<IsPackable>true</IsPackable>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Description>General-purpose toolkit of utilities and extensions.</Description>
-		<VersionPrefix>0.10.0</VersionPrefix>
-		<VersionSuffix>dev.20260718.1</VersionSuffix>
-		<Authors>Roman Malyi</Authors>
-		<Copyright>Copyright (C) 2026 Roman Malyi</Copyright>
-		<PackageProjectUrl>https://github.com/rumrunner0/back-to-reality-shared-extensions</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/rumrunner0/back-to-reality-shared-extensions</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>disable</ImplicitUsings>
 	</PropertyGroup>
 
+	<!-- Build matrix -->
+	<PropertyGroup>
+		<Configurations>Debug;Release</Configurations>
+		<Platforms>AnyCPU</Platforms>
+	</PropertyGroup>
+
+	<!-- Assembly metadata -->
 	<PropertyGroup>
 		<Company>Roman Malyi</Company>
 		<Product>Rumrunner0.BackToReality.SharedExtensions</Product>
 		<NeutralLanguage>en-US</NeutralLanguage>
-		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\..\documents\rumrunner0_backtoreality_sharedextensions.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 
+	<!-- Debug configuration -->
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-		<IncludeSource>true</IncludeSource>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<DebugSymbols>true</DebugSymbols>
 		<DebugType>portable</DebugType>
+		<DebugSymbols>true</DebugSymbols>
 		<Optimize>false</Optimize>
-		<DefineConstants>TRACE</DefineConstants>
 	</PropertyGroup>
 
+	<!-- Release configuration -->
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-		<IncludeSource>true</IncludeSource>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<DebugSymbols>true</DebugSymbols>
 		<DebugType>portable</DebugType>
+		<DebugSymbols>true</DebugSymbols>
 		<Optimize>true</Optimize>
-		<DefineConstants />
 	</PropertyGroup>
-
-	<PropertyGroup>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="..\README.md" Pack="true" PackagePath="\" />
-		<None Include="..\LICENSE" Pack="true" PackagePath="\" />
-	</ItemGroup>
 
 </Project>

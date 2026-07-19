@@ -4,19 +4,22 @@ description: Release a new version of Rumrunner0.BackToReality.SharedExtensions 
 disable-model-invocation: true
 ---
 
-Release version `$ARGUMENTS` of the package to nuget.org. If no version was given, or it isn't a bare `X.Y.Z` (optionally with a `-suffix`), stop and ask for one.
+Release version `$ARGUMENTS` of the package to nuget.org. If no version was given, or it isn't a bare `X.Y.Z` (
+optionally with a `-suffix`), stop and ask for one.
 
 Work from the repository root. Follow the steps in order. If any step fails, stop and report — do not improvise around a failed step, and never run the push after a failure.
 
 1. **Preflight.**
-   - `git status` must show no modified or staged files. If dirty, stop and ask.
-   - Verify the API key is available without printing it: `[[ -n "$NUGET_ORG_API_KEY" ]] && echo ok || echo MISSING`. If missing, tell the user to export it (it lives in their shell profile) and stop.
-   - Confirm the new version is higher than the current `<VersionPrefix>` in `Directory.Build.props`.
+    - `git status` must show no modified or staged files. If dirty, stop and ask.
+    - Verify the API key is available without printing it: `[[ -n "$NUGET_ORG_API_KEY" ]] && echo ok || echo MISSING`.
+      If missing, tell the user to export it (it lives in their shell profile) and stop.
+    - Confirm the new version is higher than the current `<VersionPrefix>` in `Rumrunner0.BackToReality.SharedExtensions.csproj`.
 
 2. **Bump the version in both places.**
-   - `Directory.Build.props`: set `<VersionPrefix>` to the new version (leave `<VersionSuffix>` empty for a normal release).
-   - `Nuget/push.zsh`: set `readonly VERSION="<version>"`.
-   - Grep both files afterwards to confirm they agree.
+    - `Rumrunner0.BackToReality.SharedExtensions.csproj`: set `<VersionPrefix>` to the new version (leave `<VersionSuffix>` empty for a normal
+      release).
+    - `Nuget/push.zsh`: set `readonly VERSION="<version>"`.
+    - Grep both files afterwards to confirm they agree.
 
 3. **Commit** directly on `main` with the message `Release <version>` (e.g. `Release 0.9.1`).
 

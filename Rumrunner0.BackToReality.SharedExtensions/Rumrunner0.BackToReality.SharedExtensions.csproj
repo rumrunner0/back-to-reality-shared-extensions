@@ -1,8 +1,58 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<!-- Packaging -->
+	<PropertyGroup>
+		<IsPackable>true</IsPackable>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<!-- Package identity -->
 	<PropertyGroup>
 		<PackageId>Rumrunner0.BackToReality.SharedExtensions</PackageId>
+		<VersionPrefix>0.10.0</VersionPrefix>
+		<VersionSuffix>dev.20260718.1</VersionSuffix>
+	</PropertyGroup>
+
+	<!-- Package metadata -->
+	<PropertyGroup>
 		<Title>Rumrunner0.BackToReality.SharedExtensions</Title>
+		<Authors>Roman Malyi</Authors>
+		<Description>General-purpose toolkit of utilities and extensions.</Description>
+		<Copyright>Copyright (C) 2026 Roman Malyi</Copyright>
+		<PackageProjectUrl>https://github.com/rumrunner0/back-to-reality-shared-extensions</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageReleaseNotes></PackageReleaseNotes>
+	</PropertyGroup>
+
+	<!-- Repository -->
+	<PropertyGroup>
+		<RepositoryUrl>https://github.com/rumrunner0/back-to-reality-shared-extensions</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+	<!-- Package content -->
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\LICENSE" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<!-- Symbol package -->
+	<PropertyGroup>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<!-- Strong naming -->
+	<PropertyGroup>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\documents\rumrunner0_backtoreality_sharedextensions.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+
+	<!-- XML documentation -->
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 </Project>
