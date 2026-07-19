@@ -61,3 +61,7 @@ using Rumrunner0.BackToReality.SharedExtensions.Disposing;
 using var resources = new DisposableGroup([connection, transaction, reader]);
 // Disposed in reverse order; failures are collected into resources.DisposalExceptions.
 ```
+
+## Development notes
+
+Packages from earlier releases accumulate in `bin/Release`, and that is expected: `dotnet clean` runs MSBuild's `Clean` target, which deletes only the build outputs recorded during the previous build, and the `Pack` target never records the `.nupkg`/`.snupkg` files it produces. These leftover packages are intentionally kept — do not delete them. They are harmless: `Nuget/push.zsh` picks the exact package file by version, so stale packages are never pushed.

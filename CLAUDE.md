@@ -14,10 +14,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `ImplicitUsings` is disabled — every file lists explicit `using` directives.
 - Package versions are centralized (`Directory.Packages.props`, CPM): a `PackageReference` must not carry `Version`; add a `PackageVersion` entry there instead.
 - The test project explicitly opts out of packing, signing, and doc generation (`IsPackable`/`SignAssembly`/`GenerateDocumentationFile` all `false`) — keep it that way.
+- Old `.nupkg`/`.snupkg` files accumulate in `bin/Release` across releases: `dotnet clean` only deletes recorded build outputs, and `Pack` never registers its packages there. This is expected and accepted — NEVER delete them (no `rm`, no cleanup steps in scripts). `Nuget/push.zsh` picks the exact file by version, so stale packages are harmless.
 
 ## Releases
 
-Use `/release <version>`. Manual flow: bump the version in both places above → `dotnet clean --configuration Release` → verify a clean `dotnet build --configuration Release` and a green `dotnet test --configuration Release --no-build` → commit `Release X.Y.Z` → `Nuget/pack.zsh` → `Nuget/push.zsh` (needs `NUGET_ORG_API_KEY`, exported in the shell profile). A pushed version can never be overwritten on nuget.org.
+Use `/release <version>`. Manual flow: bump the version in both places above → `dotnet clean --configuration Release` → verify a clean `dotnet build --configuration Release` and a green `dotnet test --configuration Release --no-build` → commit `Release X.Y.Z` → `Nuget/pack.zsh` → `Nuget/push.zsh` (needs `NUGET_ORG_API_KEY`, exported in the shell profile). A pushed version can never be overwritten on nuget.org. Packages from earlier releases remain in `bin/Release` after `dotnet clean` — that's expected (see Gotchas); leave them in place.
 
 ## Code style
 
