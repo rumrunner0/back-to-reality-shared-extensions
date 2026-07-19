@@ -9,7 +9,7 @@
 	<!-- Package identity -->
 	<PropertyGroup>
 		<PackageId>Rumrunner0.BackToReality.SharedExtensions</PackageId>
-		<VersionPrefix>0.10.0</VersionPrefix>
+		<VersionPrefix>0.10.1</VersionPrefix>
 		<VersionSuffix></VersionSuffix>
 	</PropertyGroup>
 
