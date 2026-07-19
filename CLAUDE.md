@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Releases
 
-Use `/release <version>`. Manual flow: bump the version in both places above → commit `Release X.Y.Z` → `dotnet clean --configuration Release` → verify a clean `dotnet build --configuration Release` and a green `dotnet test --configuration Release --no-build` → `Nuget/pack.zsh` → `Nuget/push.zsh` (needs `NUGET_ORG_API_KEY`, exported in the shell profile). A pushed version can never be overwritten on nuget.org.
+Use `/release <version>`. Manual flow: bump the version in both places above → `dotnet clean --configuration Release` → verify a clean `dotnet build --configuration Release` and a green `dotnet test --configuration Release --no-build` → commit `Release X.Y.Z` → `Nuget/pack.zsh` → `Nuget/push.zsh` (needs `NUGET_ORG_API_KEY`, exported in the shell profile). A pushed version can never be overwritten on nuget.org.
 
 ## Code style
 

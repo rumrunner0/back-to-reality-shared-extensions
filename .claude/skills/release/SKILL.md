@@ -1,6 +1,6 @@
 ---
 name: release
-description: Release a new version of Rumrunner0.BackToReality.SharedExtensions to nuget.org — bump the version everywhere, commit, clean Release build, pack, push. Usage /release <version>, e.g. /release 0.9.1 or a suffixed dev version /release 0.10.0-dev.20260718.1
+description: Release a new version of Rumrunner0.BackToReality.SharedExtensions to nuget.org — bump the version everywhere, validate a clean Release build, commit, pack, push. Usage /release <version>, e.g. /release 0.9.1 or a suffixed dev version /release 0.10.0-dev.20260718.1
 disable-model-invocation: true
 ---
 
@@ -18,11 +18,11 @@ Work from the repository root. Follow the steps in order. If any step fails, sto
     - `Nuget/push.zsh`: set `readonly VERSION="<version>"` — the full version string, including any suffix.
     - Grep both files afterwards to confirm they agree.
 
-3. **Commit** directly on `main` with the message `Release <version>` (e.g. `Release 0.9.1`).
+3. **Clean** so the validation and pack come from a fresh build: `dotnet clean --configuration Release --nologo --verbosity quiet`. This is the CLI equivalent of the IDE's Build → Clean: it removes the previous Release outputs from `bin/` and the intermediate build state from `obj/` for every project in the solution. NuGet restore state in `obj/` stays and is refreshed by the implicit restore of the build in the next step.
 
-4. **Clean** so the pack comes from a fresh build: `dotnet clean --configuration Release --nologo --verbosity quiet`. This is the CLI equivalent of the IDE's Build → Clean: it removes the previous Release outputs from `bin/` and the intermediate build state from `obj/` for every project in the solution. NuGet restore state in `obj/` stays and is refreshed by the implicit restore of the build in the next step.
+4. **Validate the build.** `dotnet build --configuration Release` must succeed with 0 warnings and 0 errors, and `dotnet test --configuration Release --no-build` must pass with 0 failures. Otherwise stop and report, leaving the version bump uncommitted in the working tree — do not commit, pack, or push.
 
-5. **Validate the build.** `dotnet build --configuration Release` must succeed with 0 warnings and 0 errors, and `dotnet test --configuration Release --no-build` must pass with 0 failures. Otherwise stop and report — do not pack or push.
+5. **Commit** directly on `main` with the message `Release <version>` (e.g. `Release 0.9.1`). Committing only after validation guarantees every `Release X.Y.Z` commit builds green.
 
 6. **Pack.** Run `Nuget/pack.zsh`.
 
