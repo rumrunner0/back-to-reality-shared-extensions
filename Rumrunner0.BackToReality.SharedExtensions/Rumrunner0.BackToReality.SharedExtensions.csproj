@@ -34,8 +34,8 @@
 
 	<!-- Package content -->
 	<ItemGroup>
-		<None Include="..\README.md" Pack="true" PackagePath="\" />
-		<None Include="..\LICENSE" Pack="true" PackagePath="\" />
+		<None Include="../README.md" Pack="true" PackagePath="/" />
+		<None Include="../LICENSE" Pack="true" PackagePath="/" />
 	</ItemGroup>
 
 	<!-- Symbol package -->
@@ -47,7 +47,7 @@
 	<!-- Strong naming -->
 	<PropertyGroup>
 		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\..\documents\rumrunner0_backtoreality_sharedextensions.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>../../documents/rumrunner0_backtoreality_sharedextensions.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 
 	<!-- XML documentation -->

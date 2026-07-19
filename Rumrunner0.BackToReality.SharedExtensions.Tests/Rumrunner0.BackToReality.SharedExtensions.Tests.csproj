@@ -24,7 +24,7 @@
 
 	<!-- Project references -->
 	<ItemGroup>
-		<ProjectReference Include="..\Rumrunner0.BackToReality.SharedExtensions\Rumrunner0.BackToReality.SharedExtensions.csproj" />
+		<ProjectReference Include="../Rumrunner0.BackToReality.SharedExtensions/Rumrunner0.BackToReality.SharedExtensions.csproj" />
 	</ItemGroup>
 
 </Project>
