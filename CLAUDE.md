@@ -18,7 +18,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Releases
 
-Use `/release <version>`. Manual flow: bump the version in both places above → `dotnet clean --configuration Release` → verify a clean `dotnet build --configuration Release` and a green `dotnet test --configuration Release --no-build` → commit `Release X.Y.Z` → `Nuget/pack.zsh` → `Nuget/push.zsh` (needs `NUGET_ORG_API_KEY`, exported in the shell profile). A pushed version can never be overwritten on nuget.org. Packages from earlier releases remain in `bin/Release` after `dotnet clean` — that's expected (see Gotchas); leave them in place.
+Use `/release <version>`. Manual flow: bump the version in both places above → `dotnet clean --configuration Release` → verify a clean `dotnet build --configuration Release` and a green `dotnet test --configuration Release --no-build` → commit `Release X.Y.Z` → `zsh Nuget/pack.zsh` → `zsh Nuget/push.zsh` (needs `NUGET_ORG_API_KEY`, exported in the shell profile). The scripts intentionally lack the executable bit — always invoke them via `zsh`, never `chmod +x`. A pushed version can never be overwritten on nuget.org. Packages from earlier releases remain in `bin/Release` after `dotnet clean` — that's expected (see Gotchas); leave them in place.
 
 ## Code style
 
