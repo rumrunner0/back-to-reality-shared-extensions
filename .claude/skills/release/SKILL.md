@@ -1,33 +1,40 @@
 ---
 name: release
-description: Release a new version of Rumrunner0.BackToReality.SharedExtensions to nuget.org — bump the version everywhere, validate a clean Release build, commit, pack, push. Usage /release <version>, e.g. /release 0.9.1 or a suffixed dev version /release 0.10.0-dev.20260718.1
+description: Release Rumrunner0.BackToReality.SharedExtensions to nuget.org — bump the version in the csproj AND Nuget/push.zsh, validate a clean Release build, commit, pack, push. Usage — /release 0.9.1 for a stable release, /release dev for the next dev pre-release, /release 0.10.0-dev.20260718.1 for an explicit suffixed version.
 disable-model-invocation: true
 ---
 
-Release version `$ARGUMENTS` of the package to nuget.org. If no version was given, or it isn't a bare `X.Y.Z` (e.g. `0.9.1`) optionally with a `-suffix` (e.g. `0.10.0-dev.20260718.1`), stop and ask for one.
+# Release
+
+Requested release: `$ARGUMENTS`
 
 Work from the repository root. Follow the steps in order. If any step fails, stop and report — do not improvise around a failed step, and never run the push after a failure.
 
-1. **Preflight.**
-    - `git status` must show no modified or staged files. If dirty, stop and ask.
-    - Verify the API key is available without printing it: `[[ -n "$NUGET_ORG_API_KEY" ]] && echo ok || echo MISSING`. If missing, tell the user to export it (it lives in their shell profile) and stop.
-    - Confirm the new version is higher than the current `<VersionPrefix>` in `Rumrunner0.BackToReality.SharedExtensions.csproj`.
+## Determine the full version
 
-2. **Bump the version in both places.**
-    - `Rumrunner0.BackToReality.SharedExtensions.csproj`: set `<VersionPrefix>` to the `X.Y.Z` part and `<VersionSuffix>` to everything after the first `-` (for `0.10.0-dev.20260718.1`: prefix `0.10.0`, suffix `dev.20260718.1`). Leave `<VersionSuffix>` empty for a normal release.
-    - `Nuget/push.zsh`: set `readonly VERSION="<version>"` — the full version string, including any suffix.
+- `$ARGUMENTS` is a bare version like `0.9.1` → stable release: `<VersionPrefix>` = that version, `<VersionSuffix>` = empty. Full version = the prefix (e.g. `0.9.1`).
+- `$ARGUMENTS` is `dev` → dev pre-release: keep the current `<VersionPrefix>` from the library csproj; `<VersionSuffix>` = `dev.<YYYYMMDD>.<N>` where `<YYYYMMDD>` is today (`date +%Y%m%d`) and `<N>` is 1 + the number of `Release <prefix>-dev.<YYYYMMDD>.*` commits already in `git log --oneline` for today. Full version = `<prefix>-dev.<YYYYMMDD>.<N>` (e.g. `0.10.0-dev.20260718.1`).
+- `$ARGUMENTS` is a version with an explicit suffix like `0.10.0-dev.20260718.1` → prefix = the part before the first `-`, suffix = everything after it.
+- Anything else (or empty) → ask the user what to release; do not guess.
+
+## Preflight — stop and report if any check fails
+
+1. On `main` and the working tree is clean (`git status` shows no modified or staged files). Unrelated uncommitted changes → stop and ask.
+2. Verify the API key is available without printing it: `[[ -n "$NUGET_ORG_API_KEY" ]] && echo ok || echo MISSING`. If missing, tell the user to export it (it lives in their shell profile) and stop.
+3. Confirm the new version is higher than the current one in `Rumrunner0.BackToReality.SharedExtensions.csproj` (for `dev`, the prefix stays the same by construction — just confirm the computed suffix doesn't already exist as a `Release …` commit).
+
+## Steps
+
+1. **Bump the version in both places.**
+    - `Rumrunner0.BackToReality.SharedExtensions.csproj`: set `<VersionPrefix>` and `<VersionSuffix>` (leave the suffix element empty for a stable release).
+    - `Nuget/push.zsh`: set `readonly VERSION="<full version>"` — this hard-coded value must always match the csproj, or push fails/publishes a stale package.
     - Grep both files afterwards to confirm they agree.
+2. **Clean** so the validation and pack come from a fresh build: `dotnet clean --configuration Release --nologo --verbosity quiet`. This removes the previous Release outputs from `bin/` and the intermediate build state from `obj/`; NuGet restore state stays and is refreshed by the implicit restore in the next step.
+3. **Validate the build.** `dotnet build --configuration Release` must succeed with 0 warnings and 0 errors, and `dotnet test --configuration Release --no-build` must pass with 0 failures. Otherwise stop and report, leaving the version bump uncommitted in the working tree — do not commit, pack, or push.
+4. **Commit** exactly the two bumped files, directly on `main`, with the message exactly `Release <full version>` (no other wording). Committing only after validation guarantees every `Release X.Y.Z` commit builds green.
+5. **Pack.** Run `zsh Nuget/pack.zsh` (the scripts intentionally lack the executable bit — always invoke via `zsh`) and verify the `.nupkg` for `<full version>` now exists under `Rumrunner0.BackToReality.SharedExtensions/bin/Release/`.
+6. **Push to nuget.org.** Publishing is IRREVERSIBLE (a nuget.org version can be unlisted but never replaced). Show the user the full version and ask for explicit confirmation before pushing. Then run `zsh Nuget/push.zsh`. If the key isn't visible to you, ask the user to run `! zsh Nuget/push.zsh` themselves (the `!` prefix runs it in-session with their shell environment).
+7. **Push the commit.** `git push origin main`.
+8. **Report**: the released version, the `.nupkg` path, and the package URL `https://www.nuget.org/packages/Rumrunner0.BackToReality.SharedExtensions/<version>`.
 
-3. **Clean** so the validation and pack come from a fresh build: `dotnet clean --configuration Release --nologo --verbosity quiet`. This is the CLI equivalent of the IDE's Build → Clean: it removes the previous Release outputs from `bin/` and the intermediate build state from `obj/` for every project in the solution. NuGet restore state in `obj/` stays and is refreshed by the implicit restore of the build in the next step.
-
-4. **Validate the build.** `dotnet build --configuration Release` must succeed with 0 warnings and 0 errors, and `dotnet test --configuration Release --no-build` must pass with 0 failures. Otherwise stop and report, leaving the version bump uncommitted in the working tree — do not commit, pack, or push.
-
-5. **Commit** directly on `main` with the message `Release <version>` (e.g. `Release 0.9.1`). Committing only after validation guarantees every `Release X.Y.Z` commit builds green.
-
-6. **Pack.** Run `Nuget/pack.zsh`.
-
-7. **Push to nuget.org.** Run `Nuget/push.zsh`. This is permanent — a pushed version number can never be reused or overwritten on nuget.org.
-
-8. **Push the commit.** `git push origin main`.
-
-9. **Report**: the released version, the `.nupkg` path, and the package URL `https://www.nuget.org/packages/Rumrunner0.BackToReality.SharedExtensions/<version>`.
+If the nuget push fails after the commit was made, leave the commit in place, report the error, and let the user decide — do not revert or retry automatically.
