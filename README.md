@@ -7,7 +7,7 @@ This repository contains the `Rumrunner0.BackToReality.SharedExtensions` class l
 [![Nuget](https://img.shields.io/nuget/v/Rumrunner0.BackToReality.SharedExtensions?logo=nuget&label=nuget)](https://www.nuget.org/packages/Rumrunner0.BackToReality.SharedExtensions)
 
 ## Description
-The `Rumrunner0.BackToReality.SharedExtensions` is a general-purpose class library of utilities and extension methods for everyday .NET code. It covers collections, cryptography, disposal, environment variables, exception guards and inspection, strings and object shaping, JSON serialization defaults, task awaiting, time truncation, and value objects. The library targets .NET 9, has no dependencies outside the base class library, enables nullable reference types with `[NotNull]` and `[NotNullWhen]` annotations on checks and guards, and ships strong-named with XML documentation and a symbol package.
+The `Rumrunner0.BackToReality.SharedExtensions` is a general-purpose class library of utilities and extension methods for everyday .NET code. It covers collections, cryptography, disposal, environment variables, exception guards and inspection, strings and object shaping, JSON serialization defaults, task awaiting, time truncation, and value objects.
 
 The `Rumrunner0.BackToReality.SharedExtensions.Tests` is an xunit test project covering the behavior of the library.
 
