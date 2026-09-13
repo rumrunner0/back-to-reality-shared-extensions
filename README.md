@@ -156,7 +156,7 @@ var json = JsonSerializer.Serialize(order, JsonSerializerOptionsExtensions.Bette
 ```
 
 ### Tasks
-`ContinueWithoutContextCapture()` is `ConfigureAwait(false)` under a name that states its effect: the continuation does not marshal back to the captured context. Overloads cover `Task`, `Task<T>`, `ValueTask`, and `ValueTask<T>`.
+`ContinueWithoutContextCapture()` is `ConfigureAwait(false)` under a name that states its effect: the continuation does not marshal back to the captured context. Overloads cover `Task`, `Task<T>`, `ValueTask`, `ValueTask<T>`, and `IAsyncDisposable` (configuring the hidden await of an `await using` disposal).
 
 ```csharp
 using Rumrunner0.BackToReality.SharedExtensions.Tasks;

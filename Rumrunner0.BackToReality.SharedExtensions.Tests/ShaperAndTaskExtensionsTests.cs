@@ -9,6 +9,17 @@ namespace Rumrunner0.BackToReality.SharedExtensions.Tests;
 
 public sealed class ShaperAndTaskExtensionsTests
 {
+	private sealed class FakeAsyncDisposable : IAsyncDisposable
+	{
+		public bool Disposed { get; private set; }
+
+		public ValueTask DisposeAsync()
+		{
+			this.Disposed = true;
+			return ValueTask.CompletedTask;
+		}
+	}
+
 	[Fact]
 	public void Shape_TransformsTheSource()
 	{
@@ -65,5 +76,18 @@ public sealed class ShaperAndTaskExtensionsTests
 
 		var valueResult = await new ValueTask<int>(42).ContinueWithoutContextCapture();
 		Assert.Equal(42, valueResult);
+	}
+
+	[Fact]
+	public async Task ContinueWithoutContextCapture_ConfiguresAsyncDisposal()
+	{
+		var disposable = new FakeAsyncDisposable();
+
+		await using (disposable.ContinueWithoutContextCapture())
+		{
+			Assert.False(disposable.Disposed);
+		}
+
+		Assert.True(disposable.Disposed);
 	}
 }

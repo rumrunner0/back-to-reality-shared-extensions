@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,6 +54,18 @@ public static class TaskExtensions
 	/// <typeparam name="TResult">Type of the task result.</typeparam>
 	/// <returns>A new <see cref="ConfiguredValueTaskAwaitable{TResult}" />.</returns>
 	public static ConfiguredValueTaskAwaitable<TResult> ContinueWithoutContextCapture<TResult>(this ValueTask<TResult> source)
+	{
+		return source.ConfigureAwait(continueOnCapturedContext: false);
+	}
+
+	/// <summary>
+	/// Configures the disposal of <paramref name="source"/>
+	/// so the continuation does not marshal back to the captured <see cref="SynchronizationContext"/> or <see cref="TaskScheduler"/>.<br />
+	/// Equivalent to <see cref="TaskAsyncEnumerableExtensions.ConfigureAwait(IAsyncDisposable, bool)" /> with <c>false</c>.
+	/// </summary>
+	/// <param name="source">The source.</param>
+	/// <returns>A new <see cref="ConfiguredAsyncDisposable" />.</returns>
+	public static ConfiguredAsyncDisposable ContinueWithoutContextCapture(this IAsyncDisposable source)
 	{
 		return source.ConfigureAwait(continueOnCapturedContext: false);
 	}
