@@ -15,6 +15,8 @@ public sealed class SerializationAndValueObjectTests
 
 	private sealed record Sample(string SomeValue);
 
+	private sealed record PositionalSample(string Required, string? Optional = null);
+
 	[Fact]
 	public void BetterWeb_IsASharedReadOnlyInstance()
 	{
@@ -41,6 +43,51 @@ public sealed class SerializationAndValueObjectTests
 		Assert.True(options.PropertyNameCaseInsensitive);
 		Assert.Equal(JsonNamingPolicy.CamelCase, options.PropertyNamingPolicy);
 		Assert.True(options.WriteIndented);
+	}
+
+	[Fact]
+	public void ConfigureBetterWeb_EnforcesNullabilityAnnotationsAndRequiredConstructorParameters()
+	{
+		var options = new JsonSerializerOptions().ConfigureBetterWeb();
+		Assert.True(options.RespectNullableAnnotations);
+		Assert.True(options.RespectRequiredConstructorParameters);
+		Assert.True(JsonSerializerOptionsExtensions.BetterWeb.RespectNullableAnnotations);
+		Assert.True(JsonSerializerOptionsExtensions.BetterWeb.RespectRequiredConstructorParameters);
+	}
+
+	[Fact]
+	public void BetterWeb_RejectsMissingConstructorParameterWithoutDefault()
+	{
+		var exception = Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<PositionalSample>("""{ "optional": "data" }""", JsonSerializerOptionsExtensions.BetterWeb));
+		Assert.Contains("missing required properties", exception.Message);
+	}
+
+	[Fact]
+	public void BetterWeb_KeepsConstructorParameterWithDefaultOptional()
+	{
+		var parsed = JsonSerializer.Deserialize<PositionalSample>("""{ "required": "data" }""", JsonSerializerOptionsExtensions.BetterWeb);
+		Assert.Equal("data", parsed?.Required);
+		Assert.Null(parsed?.Optional);
+	}
+
+	[Fact]
+	public void BetterWeb_RejectsNullInNonNullableMemberOnRead()
+	{
+		Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<PositionalSample>("""{ "required": null }""", JsonSerializerOptionsExtensions.BetterWeb));
+	}
+
+	[Fact]
+	public void BetterWeb_RejectsNullInNonNullableMemberOnWrite()
+	{
+		Assert.Throws<JsonException>(() => JsonSerializer.Serialize(new PositionalSample(null!), JsonSerializerOptionsExtensions.BetterWeb));
+	}
+
+	[Fact]
+	public void BetterWeb_AcceptsNullInNullableMember()
+	{
+		var parsed = JsonSerializer.Deserialize<PositionalSample>("""{ "required": "data", "optional": null }""", JsonSerializerOptionsExtensions.BetterWeb);
+		Assert.Equal("data", parsed?.Required);
+		Assert.Null(parsed?.Optional);
 	}
 
 	[Fact]

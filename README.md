@@ -147,12 +147,17 @@ var summary = order
 `EmailAddressExtensions.PragmaticRegex()` is a source-generated, case-insensitive email pattern meant for practical validation rather than full RFC coverage.
 
 ### Serialization
-`JsonSerializerOptionsExtensions.BetterWeb` is a shared, read-only `JsonSerializerOptions` instance: camelCase names, case-insensitive reading, strict number handling, indented output with tabs, `\n` line endings, no trailing commas. `ConfigureBetterWeb()` applies the same settings to an instance you own.
+`JsonSerializerOptionsExtensions.BetterWeb` is a shared, read-only `JsonSerializerOptions` instance: camelCase names, case-insensitive reading, strict number handling, indented output with tabs, `\n` line endings, no trailing commas, and declarations enforced in both directions: an explicit `null` in a non-nullable member throws on read and on write, and a constructor parameter without a default value must be present in the JSON. Nullability alone does not make a parameter optional, so give optional positional members a default value. `ConfigureBetterWeb()` applies the same settings to an instance you own.
 
 ```csharp
+using System;
+using System.Text.Json;
 using Rumrunner0.BackToReality.SharedExtensions.Serialization;
 
 var json = JsonSerializer.Serialize(order, JsonSerializerOptionsExtensions.BetterWeb);
+
+// Id must be present and non-null in the JSON; Note may be omitted or null.
+public sealed record class Order(Guid Id, string? Note = null);
 ```
 
 ### Tasks

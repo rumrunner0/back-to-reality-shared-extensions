@@ -32,6 +32,13 @@ public static class JsonSerializerOptionsExtensions
 		options.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
 		options.IgnoreReadOnlyProperties = false;
 
+		// Declarations are enforced on the wire in both directions.
+		// An explicit null in a non-nullable member throws on read and on write,
+		// and a constructor parameter without a default value must be present.
+		// Optional means "has a default value"; nullability alone does not make a parameter optional.
+		options.RespectNullableAnnotations = true;
+		options.RespectRequiredConstructorParameters = true;
+
 		options.WriteIndented = true;
 		options.IndentCharacter = '\t';
 		options.IndentSize = 1;

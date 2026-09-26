@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `ImplicitUsings` is disabled — every file lists explicit `using` directives.
 - Package versions are centralized (`Directory.Packages.props`, CPM): a `PackageReference` must not carry `Version`; add a `PackageVersion` entry there instead.
 - The test project explicitly opts out of packing, signing, and doc generation (`IsPackable`/`SignAssembly`/`GenerateDocumentationFile` all `false`) — keep it that way.
+- `BetterWeb` enforces declarations in both directions (`RespectNullableAnnotations` + `RespectRequiredConstructorParameters`, .NET 9): an explicit JSON `null` into a non-nullable member throws on read AND on write, and a constructor parameter without a default value must be present in the JSON. Optional positional members must declare a default (`string? Note = null`) — nullability alone does not make a parameter optional. Consumers that persist JSON with these options must give newly added positional members a default, or previously stored documents stop deserializing. Both checks cover top-level members and constructor parameters only, not collection elements or generic arguments.
 - Old `.nupkg`/`.snupkg` files accumulate in `bin/Release` across releases: `dotnet clean` only deletes recorded build outputs, and `Pack` never registers its packages there. This is expected and accepted — NEVER delete them (no `rm`, no cleanup steps in scripts). `Nuget/push.zsh` picks the exact file by version, so stale packages are harmless.
 
 ## Releases
