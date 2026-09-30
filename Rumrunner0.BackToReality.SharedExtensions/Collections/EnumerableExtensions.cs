@@ -1,13 +1,17 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Rumrunner0.BackToReality.SharedExtensions.Exceptions;
 
 namespace Rumrunner0.BackToReality.SharedExtensions.Collections;
 
-/// <summary>Extensions for <see cref="IEnumerable{T}" />.</summary>
+/// <summary>Extensions for <see cref="IEnumerable{T}" /> and <see cref="IEnumerable" />.</summary>
 public static class EnumerableExtensions
 {
+	// Generic
+
 	/// <summary>Joins a collection using <paramref name="separator" />.</summary>
 	/// <param name="source">The collection.</param>
 	/// <param name="separator">The separator.</param>
@@ -121,6 +125,8 @@ public static class EnumerableExtensions
 	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
 	private static int CountAtMost<T>(IEnumerable<T> source, int limit)
 	{
+		ArgumentExceptionExtensions.ThrowIfNull(source);
+
 		if (source.TryGetNonEnumeratedCount(out var count))
 		{
 			return count < limit ? count : limit;
@@ -131,6 +137,125 @@ public static class EnumerableExtensions
 		while (counted < limit && enumerator.MoveNext())
 		{
 			counted++;
+		}
+
+		return counted;
+	}
+
+	// Non-generic
+
+	/// <summary>Determines whether a non-generic collection is <c>null</c> or empty.</summary>
+	/// <param name="source">The collection.</param>
+	/// <returns><c>true</c> if the collection is <c>null</c> or empty; <c>false</c> otherwise.</returns>
+	public static bool IsNullOrEmpty([NotNullWhen(false)] this IEnumerable? source)
+	{
+		return source is null || source.None();
+	}
+
+	/// <summary>Determines whether a non-generic collection isn't <c>null</c> and isn't empty.</summary>
+	/// <param name="source">The collection.</param>
+	/// <returns><c>true</c> if the collection isn't <c>null</c> and isn't empty; <c>false</c> otherwise.</returns>
+	public static bool IsNotNullAndNotEmpty([NotNullWhen(true)] this IEnumerable? source)
+	{
+		return source is not null && source.Some();
+	}
+
+	/// <summary>Determines whether a non-generic collection is empty.</summary>
+	/// <param name="source">The collection.</param>
+	/// <returns><c>true</c> if the collection is empty; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
+	public static bool None(this IEnumerable source)
+	{
+		return source.Exactly(0);
+	}
+
+	/// <summary>Determines whether a non-generic collection isn't empty.</summary>
+	/// <param name="source">The collection.</param>
+	/// <returns><c>true</c> if the collection has at least one item; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
+	public static bool Some(this IEnumerable source)
+	{
+		return source.AtLeast(1);
+	}
+
+	/// <summary>Determines whether a non-generic collection contains multiple items.</summary>
+	/// <param name="source">The collection.</param>
+	/// <returns><c>true</c> if the collection has multiple items; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
+	public static bool Many(this IEnumerable source)
+	{
+		return source.MoreThan(1);
+	}
+
+	/// <summary>Determines whether a non-generic collection contains exactly the <paramref name="count" /> of items.</summary>
+	/// <param name="source">The collection.</param>
+	/// <param name="count">The exact count of items expected in the collection.</param>
+	/// <returns><c>true</c> if the collection contains exactly the <paramref name="count" /> of items; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
+	public static bool Exactly(this IEnumerable source, int count)
+	{
+		var limit = count < 0 ? 0 : count == int.MaxValue ? int.MaxValue : count + 1;
+		return CountAtMost(source, limit) == count;
+	}
+
+	/// <summary>Determines whether a non-generic collection contains more than the <paramref name="count" /> of items.</summary>
+	/// <param name="source">The collection.</param>
+	/// <param name="count">The count of items to compare against the collection count.</param>
+	/// <returns><c>true</c> if the collection contains more than the <paramref name="count" /> of items; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
+	public static bool MoreThan(this IEnumerable source, int count)
+	{
+		var limit = count < 0 ? 0 : count == int.MaxValue ? int.MaxValue : count + 1;
+		return CountAtMost(source, limit) > count;
+	}
+
+	/// <summary>Determines whether a non-generic collection contains less than the <paramref name="count" /> of items.</summary>
+	/// <param name="source">The collection.</param>
+	/// <param name="count">The count of items to compare against the collection count.</param>
+	/// <returns><c>true</c> if the collection contains less than the <paramref name="count" /> of items; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
+	public static bool LessThan(this IEnumerable source, int count)
+	{
+		return CountAtMost(source, count < 0 ? 0 : count) < count;
+	}
+
+	/// <summary>Determines whether a non-generic collection contains at least the <paramref name="count" /> of items.</summary>
+	/// <param name="source">The collection.</param>
+	/// <param name="count">The minimum count of items expected in the collection.</param>
+	/// <returns><c>true</c> if the collection contains at least the <paramref name="count" /> of items; <c>false</c> otherwise.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
+	public static bool AtLeast(this IEnumerable source, int count)
+	{
+		return CountAtMost(source, count < 0 ? 0 : count) >= count;
+	}
+
+	/// <summary>Counts the items in a non-generic <paramref name="source" />, enumerating no further than <paramref name="limit" /> items.</summary>
+	/// <param name="source">The collection.</param>
+	/// <param name="limit">The maximum number of items to count.</param>
+	/// <returns>The item count, capped at <paramref name="limit" />.</returns>
+	/// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> is <c>null</c>.</exception>
+	private static int CountAtMost(IEnumerable source, int limit)
+	{
+		ArgumentExceptionExtensions.ThrowIfNull(source);
+
+		if (source is ICollection collection)
+		{
+			return collection.Count < limit ? collection.Count : limit;
+		}
+
+		var counted = 0;
+		var enumerator = source.GetEnumerator();
+
+		try
+		{
+			while (counted < limit && enumerator.MoveNext())
+			{
+				counted++;
+			}
+		}
+		finally
+		{
+			(enumerator as IDisposable)?.Dispose();
 		}
 
 		return counted;

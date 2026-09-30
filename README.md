@@ -26,6 +26,7 @@ Counting predicates for `IEnumerable<T>` that stop enumerating as soon as the an
 - `None()`, `Some()`, `Many()` for the common cases.
 - `Exactly(n)`, `AtLeast(n)`, `MoreThan(n)`, `LessThan(n)` for explicit bounds.
 - `IsNullOrEmpty()` and `IsNotNullAndNotEmpty()`, annotated so the compiler narrows nullability after the check.
+- The same set exists for the non-generic `IEnumerable`, counting through `ICollection` when the collection exposes a count and otherwise enumerating no further than needed.
 
 ```csharp
 using Rumrunner0.BackToReality.SharedExtensions.Collections;
