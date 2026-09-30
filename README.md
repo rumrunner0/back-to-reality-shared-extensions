@@ -161,6 +161,23 @@ var json = JsonSerializer.Serialize(order, JsonSerializerOptionsExtensions.Bette
 public sealed record class Order(Guid Id, string? Note = null);
 ```
 
+`[JsonIgnoreWhenEmpty]` marks a non-nullable collection member that these options omit from the JSON when it is empty. Initialize the member to an empty collection and an absent member reads back as empty, so absence and emptiness are one state on the wire. An explicit `null` is still rejected, the attribute on a nullable, string, or non-collection member fails at the first use of the type, and the rule lives in the options, so it applies only to serialization through `BetterWeb` or an instance configured with `ConfigureBetterWeb()`.
+
+```csharp
+using System.Collections.Generic;
+using System.Text.Json;
+using Rumrunner0.BackToReality.SharedExtensions.Serialization;
+
+// Serializes as {"content": "c"} while Warnings is empty, and with the array once it is not.
+public sealed record class Envelope
+{
+	public required string Content { get; init; }
+
+	[JsonIgnoreWhenEmpty]
+	public IReadOnlyList<string> Warnings { get; init; } = [];
+}
+```
+
 ### Tasks
 `ContinueWithoutContextCapture()` is `ConfigureAwait(false)` under a name that states its effect: the continuation does not marshal back to the captured context. Overloads cover `Task`, `Task<T>`, `ValueTask`, `ValueTask<T>`, and `IAsyncDisposable` (configuring the hidden await of an `await using` disposal).
 
